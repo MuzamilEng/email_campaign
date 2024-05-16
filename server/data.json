@@ -1,0 +1,983 @@
+{
+	"info": {
+		"_postman_id": "fbc193ee-29f8-433f-b6ab-34a69e9837ab",
+		"name": "goenergy",
+		"description": "To access the Go Energy service frontend, the frontend application should provide an Authorization header with a bearer token obtained from the Auth0 authentication service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31933258"
+	},
+	"item": [
+		{
+			"name": "New User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"first_name\" : \"alazar\",\r\n    \"last_name\":\"beyene\",\r\n\t\"email\": \"alazarbeyend@gmail.com\",\r\n    \"mobile_phone\":\"0975146165\",\r\n    \"password\":\"Act#8we8ew#wwew\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"user"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii0tOW1wYXVlbTVCaXVCcjNINzZGYiJ9.eyJpc3MiOiJodHRwczovL2Rldi13dHNlcGdubzJnY2Mxd3E4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJiMHBKYnFHUjBEWDQwZWlTYlFrc0hia2cyZmFnelgyckBjbGllbnRzIiwiYXVkIjoiaGVsbG9faWRlbnRpZmllciIsImlhdCI6MTcxNTAzMDc4MywiZXhwIjoxNzE1MTE3MTgzLCJzY29wZSI6ImNyZWF0ZTp1c2VyIGdldDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6ImIwcEpicUdSMERYNDBlaVNiUWtzSGJrZzJmYWd6WDJyIiwicGVybWlzc2lvbnMiOlsiY3JlYXRlOnVzZXIiLCJnZXQ6dXNlcnMiXX0.hmM7h5vTGtU-L3StuD5G_iEiOBsLUe9lm9uor2FtYv9PJOTQZMTgB8BSf7R1osgA4JJ0nOcQFonb8Gb9SzVjv7JalSGDFUY2onTptrbDH0nlVKVgN4tvokVb2zRBipT6BXAHJjP0-S7Nef2HfBjGPc_axkUPE4Os7wSrv_0lwTQTXwrMUSrzfWqvV1DTgbfay-RzFFYA4HzXuEijPgLIFoeO4Mj9sRarFWygiOyzt2R4mc31TApgDM7-_xyyVvRDIQRpXJIoLdzwmSTBM709w4UzxKWjIU6Fg1XSD6fVJWZHxX11fhWVLN87LUbBN5zb4aoaI56EiHkMiRD93pr2uA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/vendor/stats",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"vendor",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlBwb25YazMzWndOOFdoMHplQW5zWjFULTFSTSJ9.eyJhdWQiOiIyYTk4ZmVlMC1mYjYyLTQ2NjQtODk0Ni1iOTc4MWEyYTA3ZjYiLCJleHAiOjE3MTUzMzAyNDUsImlhdCI6MTcxNTMyNjY0NSwiaXNzIjoibG9jYWxob3N0OjkwMTEiLCJzdWIiOiJkZWU1N2QwMC1iOTdjLTQxMDMtYTZjZi0xZjQyZDNiNGFiNWYiLCJqdGkiOiI0ZTcxNjk1OS1lNzJiLTQ0NmQtYTA4YS0xMWE0Y2FlYTlmYmMiLCJhdXRoZW50aWNhdGlvblR5cGUiOiJSRUdJU1RSQVRJT04iLCJhcHBsaWNhdGlvbklkIjoiMmE5OGZlZTAtZmI2Mi00NjY0LTg5NDYtYjk3ODFhMmEwN2Y2Iiwicm9sZXMiOlsidXNlciJdLCJhdXRoX3RpbWUiOjE3MTUzMjY2NDUsInRpZCI6IjYxZjExNTRkLWVlZWMtOGFjMC1hMzk3LTMwMDViOTY1MmMxNiJ9.XllAC5USee6BkHjkAamYolrzUElWfDJ6sfM2D5cGySmq8360bsAggUVfWStSVZRnfmm0ZjBuMiVoi_4erY7mb2HDHnM4Kt8ogKfub16OM2z8sSt6135ttgnAPt2f6LFwNgYjohs7Q_2Tz9t3dSk1gPAscgEzyvhjwUt9ATcw9qyD_ruVO2Fj5ZlAfOBjU8bLIg12WJFSwjWKqfr4akuKNq9vjNpiCCQJqGPnnrmhfzjdMQdQ92sN_of2nbf-ABz7PeoqMv9-Y9n4aXVOGBBAIW6oz47HWu4cl7fRv2s9VRo-BquEdXRUMOfTPdhdk3p_VbVN121ZC1bVmqBUWS-_Fg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"profile"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get token by code",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii0tOW1wYXVlbTVCaXVCcjNINzZGYiJ9.eyJpc3MiOiJodHRwczovL2Rldi13dHNlcGdubzJnY2Mxd3E4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJiMHBKYnFHUjBEWDQwZWlTYlFrc0hia2cyZmFnelgyckBjbGllbnRzIiwiYXVkIjoiaGVsbG9faWRlbnRpZmllciIsImlhdCI6MTcxNTAzMDc4MywiZXhwIjoxNzE1MTE3MTgzLCJzY29wZSI6ImNyZWF0ZTp1c2VyIGdldDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6ImIwcEpicUdSMERYNDBlaVNiUWtzSGJrZzJmYWd6WDJyIiwicGVybWlzc2lvbnMiOlsiY3JlYXRlOnVzZXIiLCJnZXQ6dXNlcnMiXX0.hmM7h5vTGtU-L3StuD5G_iEiOBsLUe9lm9uor2FtYv9PJOTQZMTgB8BSf7R1osgA4JJ0nOcQFonb8Gb9SzVjv7JalSGDFUY2onTptrbDH0nlVKVgN4tvokVb2zRBipT6BXAHJjP0-S7Nef2HfBjGPc_axkUPE4Os7wSrv_0lwTQTXwrMUSrzfWqvV1DTgbfay-RzFFYA4HzXuEijPgLIFoeO4Mj9sRarFWygiOyzt2R4mc31TApgDM7-_xyyVvRDIQRpXJIoLdzwmSTBM709w4UzxKWjIU6Fg1XSD6fVJWZHxX11fhWVLN87LUbBN5zb4aoaI56EiHkMiRD93pr2uA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/token/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"token",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get auth access token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/auth/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Receipt info",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"testusreemail@gmail.com\",\r\n    \"page_number\":2,\r\n    \"per_page\":2\r\n    // // can also add request_id  which is optional \r\n    // \"request_id\":\"Up2zdm4VjWMOy68iW0ntFsr1LEGA5f\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/customer/receipt",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"customer",
+						"receipt"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transactions by type",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"PREPAID\",\r\n    \"page_number\":1,\r\n    \"per_page\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/v1/vendor/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"vendor",
+						"transactions"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get access token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"codUser\": \"codUser6\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create sub vendor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"codNewUser\": \"codUser8\",\r\n\t\"name\" : \"alazar beyene mamo\",\r\n\t\"email\": \"alazarbeyen4@gmail.com\",\r\n    \"userAdmin\":false,\r\n    \"active\":true,\r\n    \"phoneNo\":\"097584856895\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/sub/vendor",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"sub",
+						"vendor"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set vendoer password",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"password\":\"thisiisnewgeneratedpasswrodfortest#12344\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/venodr/password",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"venodr",
+						"password"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify User",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"codUser\": \"codUser4\",\r\n\t\"codUserMod\": \"codUser4\",\r\n    \"newName\": \"usernewname\",\r\n    \"newEmail\": \"email@ekedp.com\",\r\n    \"userAdmin\": false,\r\n    \"newIsActive\": false\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"currentPwd\": \"1@m@CCP\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/password/validate",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"password",
+						"validate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Enquiries",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"receipt\": \"7123202403200000001\",\r\n    \"dateFrom\":1710968101000 ,\r\n    \"dateTo\": 1710968400000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/customer/enquiries",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"customer",
+						"enquiries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"currentPwd\": \"1@m@CCP\",\r\n    \"newPwd\": \"1@m@CCPdd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/password",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"codUser4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/password",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "shift enquiries",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"passWord\": \"thisiisnewgeneratedpasswrodfortest#12344\",\r\n    \"codUserShift\": \"ralmuofKLtd\",\r\n    \"paymentDate\": 1711811541419\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/shiftenquiries",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"shiftenquiries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search  Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlBwb25YazMzWndOOFdoMHplQW5zWjFULTFSTSJ9.eyJhdWQiOiIyYTk4ZmVlMC1mYjYyLTQ2NjQtODk0Ni1iOTc4MWEyYTA3ZjYiLCJleHAiOjE3MTUyNjU4NjMsImlhdCI6MTcxNTI2MjI2MywiaXNzIjoibG9jYWxob3N0OjkwMTEiLCJzdWIiOiIwMTE2OWFhMi0wNTViLTRiYjYtYTkyNi0yYTUwZjMzNmE2ZjIiLCJqdGkiOiJiNzgyNjlhZi03ZWM2LTRiZTItYjI2NS05MjhlZTY0MGYyYmMiLCJhdXRoZW50aWNhdGlvblR5cGUiOiJSRUdJU1RSQVRJT04iLCJhcHBsaWNhdGlvbklkIjoiMmE5OGZlZTAtZmI2Mi00NjY0LTg5NDYtYjk3ODFhMmEwN2Y2Iiwicm9sZXMiOlsidXNlciJdLCJhdXRoX3RpbWUiOjE3MTUyNjIyNjMsInRpZCI6IjYxZjExNTRkLWVlZWMtOGFjMC1hMzk3LTMwMDViOTY1MmMxNiJ9.xzObBAXzCP1GDZ9I-s4HU3OCluBw0bLfNtOymZexlZj2GlfwOEhUOvmD6LtyqLJakta27kmjmi2VYt7vcSExaD6k9YjnOEdBVPeefwg1k8tJ2Y8gx-5HWzH5XeGdunSNj0E1CLZfzCOJ3AqXfw8GnlX2m9o7DO1mHtafTvrFVCOCzO3-IqNNkIaZKiyh3XjMqc9RynzEYYYPjKecK0fN5A4MWs3B4G0X07tV4G08cddMU_vT8XvadPt7ngbbqN1ywg4oBwQSo7_L78TWErt1dfeJdSeadJyocDEcHLEjwhWf4Q90sokPIDhfvBicyowlDWVBoO5ypNqYshdLhhYnaw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/vendor",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vendor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criteria Type",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"codUser4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/criteria/type",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"criteria",
+						"type"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"codType\": \"MY003\",\r\n    \"value\": \"47000388950\",\r\n    \"totalPayment\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/customer",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"meterSerial\": \"200400185314\"\r\n    \"account\": 704135499,\r\n    \"totalPayment\": 1000,\r\n    \"debtPayment\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/calculate/price",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"calculate",
+						"price"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "//deleted Make Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"meterSerial\": \"216478099_1\",\r\n    \"totalPayment\": 2000.00,\r\n    \"requestID\": \"TNMAE21POdDDd4\",\r\n    \"channel\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/make/payment",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"make",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"meterSerial\": \"07082988747\",\r\n    \"totalPayment\": 1000,\r\n    \"email\":\"testusreemail@gmail.com\",\r\n    \"channel\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.goenergee.ng/api/v1/make/payment",
+					"protocol": "https",
+					"host": [
+						"api",
+						"goenergee",
+						"ng"
+					],
+					"path": [
+						"api",
+						"v1",
+						"make",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify payment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/verify/payment/yq31d2on9f",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"verify",
+						"payment",
+						"yq31d2on9f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get receipt using token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{EKEDC_BEARER}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/payment/5535 7189 9976 0688 2994",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"payment",
+						"5535 7189 9976 0688 2994"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Detailed Payment Information",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codUser\": \"ralmuofKLtd\",\r\n    \"requestID\": \"TNMAE21XPP1OX234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/payment/information",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"payment",
+						"information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vendor Transactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii0tOW1wYXVlbTVCaXVCcjNINzZGYiJ9.eyJpc3MiOiJodHRwczovL2Rldi13dHNlcGdubzJnY2Mxd3E4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJBeGpSWHNPdHAzTFBLdVRFSkp4NWdpTGM4bmxmb25rVkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9kZXYtd3RzZXBnbm8yZ2NjMXdxOC51cy5hdXRoMC5jb20vYXBpL3YyLyIsImlhdCI6MTcxMjAwMjYwOCwiZXhwIjoxNzEyMDg5MDA4LCJzY29wZSI6InJlYWQ6Y2xpZW50X2dyYW50cyBjcmVhdGU6Y2xpZW50X2dyYW50cyBkZWxldGU6Y2xpZW50X2dyYW50cyB1cGRhdGU6Y2xpZW50X2dyYW50cyByZWFkOnVzZXJzIHVwZGF0ZTp1c2VycyBkZWxldGU6dXNlcnMgY3JlYXRlOnVzZXJzIHJlYWQ6dXNlcnNfYXBwX21ldGFkYXRhIHVwZGF0ZTp1c2Vyc19hcHBfbWV0YWRhdGEgZGVsZXRlOnVzZXJzX2FwcF9tZXRhZGF0YSBjcmVhdGU6dXNlcnNfYXBwX21ldGFkYXRhIHJlYWQ6dXNlcl9jdXN0b21fYmxvY2tzIGNyZWF0ZTp1c2VyX2N1c3RvbV9ibG9ja3MgZGVsZXRlOnVzZXJfY3VzdG9tX2Jsb2NrcyBjcmVhdGU6dXNlcl90aWNrZXRzIHJlYWQ6Y2xpZW50cyB1cGRhdGU6Y2xpZW50cyBkZWxldGU6Y2xpZW50cyBjcmVhdGU6Y2xpZW50cyByZWFkOmNsaWVudF9rZXlzIHVwZGF0ZTpjbGllbnRfa2V5cyBkZWxldGU6Y2xpZW50X2tleXMgY3JlYXRlOmNsaWVudF9rZXlzIHJlYWQ6Y29ubmVjdGlvbnMgdXBkYXRlOmNvbm5lY3Rpb25zIGRlbGV0ZTpjb25uZWN0aW9ucyBjcmVhdGU6Y29ubmVjdGlvbnMgcmVhZDpyZXNvdXJjZV9zZXJ2ZXJzIHVwZGF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGRlbGV0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGNyZWF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIHJlYWQ6ZGV2aWNlX2NyZWRlbnRpYWxzIHVwZGF0ZTpkZXZpY2VfY3JlZGVudGlhbHMgZGVsZXRlOmRldmljZV9jcmVkZW50aWFscyBjcmVhdGU6ZGV2aWNlX2NyZWRlbnRpYWxzIHJlYWQ6cnVsZXMgdXBkYXRlOnJ1bGVzIGRlbGV0ZTpydWxlcyBjcmVhdGU6cnVsZXMgcmVhZDpydWxlc19jb25maWdzIHVwZGF0ZTpydWxlc19jb25maWdzIGRlbGV0ZTpydWxlc19jb25maWdzIHJlYWQ6aG9va3MgdXBkYXRlOmhvb2tzIGRlbGV0ZTpob29rcyBjcmVhdGU6aG9va3MgcmVhZDphY3Rpb25zIHVwZGF0ZTphY3Rpb25zIGRlbGV0ZTphY3Rpb25zIGNyZWF0ZTphY3Rpb25zIHJlYWQ6ZW1haWxfcHJvdmlkZXIgdXBkYXRlOmVtYWlsX3Byb3ZpZGVyIGRlbGV0ZTplbWFpbF9wcm92aWRlciBjcmVhdGU6ZW1haWxfcHJvdmlkZXIgYmxhY2tsaXN0OnRva2VucyByZWFkOnN0YXRzIHJlYWQ6aW5zaWdodHMgcmVhZDp0ZW5hbnRfc2V0dGluZ3MgdXBkYXRlOnRlbmFudF9zZXR0aW5ncyByZWFkOmxvZ3MgcmVhZDpsb2dzX3VzZXJzIHJlYWQ6c2hpZWxkcyBjcmVhdGU6c2hpZWxkcyB1cGRhdGU6c2hpZWxkcyBkZWxldGU6c2hpZWxkcyByZWFkOmFub21hbHlfYmxvY2tzIGRlbGV0ZTphbm9tYWx5X2Jsb2NrcyB1cGRhdGU6dHJpZ2dlcnMgcmVhZDp0cmlnZ2VycyByZWFkOmdyYW50cyBkZWxldGU6Z3JhbnRzIHJlYWQ6Z3VhcmRpYW5fZmFjdG9ycyB1cGRhdGU6Z3VhcmRpYW5fZmFjdG9ycyByZWFkOmd1YXJkaWFuX2Vucm9sbG1lbnRzIGRlbGV0ZTpndWFyZGlhbl9lbnJvbGxtZW50cyBjcmVhdGU6Z3VhcmRpYW5fZW5yb2xsbWVudF90aWNrZXRzIHJlYWQ6dXNlcl9pZHBfdG9rZW5zIGNyZWF0ZTpwYXNzd29yZHNfY2hlY2tpbmdfam9iIGRlbGV0ZTpwYXNzd29yZHNfY2hlY2tpbmdfam9iIHJlYWQ6Y3VzdG9tX2RvbWFpbnMgZGVsZXRlOmN1c3RvbV9kb21haW5zIGNyZWF0ZTpjdXN0b21fZG9tYWlucyB1cGRhdGU6Y3VzdG9tX2RvbWFpbnMgcmVhZDplbWFpbF90ZW1wbGF0ZXMgY3JlYXRlOmVtYWlsX3RlbXBsYXRlcyB1cGRhdGU6ZW1haWxfdGVtcGxhdGVzIHJlYWQ6bWZhX3BvbGljaWVzIHVwZGF0ZTptZmFfcG9saWNpZXMgcmVhZDpyb2xlcyBjcmVhdGU6cm9sZXMgZGVsZXRlOnJvbGVzIHVwZGF0ZTpyb2xlcyByZWFkOnByb21wdHMgdXBkYXRlOnByb21wdHMgcmVhZDpicmFuZGluZyB1cGRhdGU6YnJhbmRpbmcgZGVsZXRlOmJyYW5kaW5nIHJlYWQ6bG9nX3N0cmVhbXMgY3JlYXRlOmxvZ19zdHJlYW1zIGRlbGV0ZTpsb2dfc3RyZWFtcyB1cGRhdGU6bG9nX3N0cmVhbXMgY3JlYXRlOnNpZ25pbmdfa2V5cyByZWFkOnNpZ25pbmdfa2V5cyB1cGRhdGU6c2lnbmluZ19rZXlzIHJlYWQ6bGltaXRzIHVwZGF0ZTpsaW1pdHMgY3JlYXRlOnJvbGVfbWVtYmVycyByZWFkOnJvbGVfbWVtYmVycyBkZWxldGU6cm9sZV9tZW1iZXJzIHJlYWQ6ZW50aXRsZW1lbnRzIHJlYWQ6YXR0YWNrX3Byb3RlY3Rpb24gdXBkYXRlOmF0dGFja19wcm90ZWN0aW9uIHJlYWQ6b3JnYW5pemF0aW9uc19zdW1tYXJ5IGNyZWF0ZTphdXRoZW50aWNhdGlvbl9tZXRob2RzIHJlYWQ6YXV0aGVudGljYXRpb25fbWV0aG9kcyB1cGRhdGU6YXV0aGVudGljYXRpb25fbWV0aG9kcyBkZWxldGU6YXV0aGVudGljYXRpb25fbWV0aG9kcyByZWFkOm9yZ2FuaXphdGlvbnMgdXBkYXRlOm9yZ2FuaXphdGlvbnMgY3JlYXRlOm9yZ2FuaXphdGlvbnMgZGVsZXRlOm9yZ2FuaXphdGlvbnMgY3JlYXRlOm9yZ2FuaXphdGlvbl9tZW1iZXJzIHJlYWQ6b3JnYW5pemF0aW9uX21lbWJlcnMgZGVsZXRlOm9yZ2FuaXphdGlvbl9tZW1iZXJzIGNyZWF0ZTpvcmdhbml6YXRpb25fY29ubmVjdGlvbnMgcmVhZDpvcmdhbml6YXRpb25fY29ubmVjdGlvbnMgdXBkYXRlOm9yZ2FuaXphdGlvbl9jb25uZWN0aW9ucyBkZWxldGU6b3JnYW5pemF0aW9uX2Nvbm5lY3Rpb25zIGNyZWF0ZTpvcmdhbml6YXRpb25fbWVtYmVyX3JvbGVzIHJlYWQ6b3JnYW5pemF0aW9uX21lbWJlcl9yb2xlcyBkZWxldGU6b3JnYW5pemF0aW9uX21lbWJlcl9yb2xlcyBjcmVhdGU6b3JnYW5pemF0aW9uX2ludml0YXRpb25zIHJlYWQ6b3JnYW5pemF0aW9uX2ludml0YXRpb25zIGRlbGV0ZTpvcmdhbml6YXRpb25faW52aXRhdGlvbnMgZGVsZXRlOnBob25lX3Byb3ZpZGVycyBjcmVhdGU6cGhvbmVfcHJvdmlkZXJzIHJlYWQ6cGhvbmVfcHJvdmlkZXJzIHVwZGF0ZTpwaG9uZV9wcm92aWRlcnMgZGVsZXRlOnBob25lX3RlbXBsYXRlcyBjcmVhdGU6cGhvbmVfdGVtcGxhdGVzIHJlYWQ6cGhvbmVfdGVtcGxhdGVzIHVwZGF0ZTpwaG9uZV90ZW1wbGF0ZXMgY3JlYXRlOmVuY3J5cHRpb25fa2V5cyByZWFkOmVuY3J5cHRpb25fa2V5cyB1cGRhdGU6ZW5jcnlwdGlvbl9rZXlzIGRlbGV0ZTplbmNyeXB0aW9uX2tleXMgcmVhZDpzZXNzaW9ucyBkZWxldGU6c2Vzc2lvbnMgcmVhZDpyZWZyZXNoX3Rva2VucyBkZWxldGU6cmVmcmVzaF90b2tlbnMgY3JlYXRlOnNlbGZfc2VydmljZV9wcm9maWxlcyByZWFkOnNlbGZfc2VydmljZV9wcm9maWxlcyB1cGRhdGU6c2VsZl9zZXJ2aWNlX3Byb2ZpbGVzIGRlbGV0ZTpzZWxmX3NlcnZpY2VfcHJvZmlsZXMgY3JlYXRlOnNzb19hY2Nlc3NfdGlja2V0cyByZWFkOmNsaWVudF9jcmVkZW50aWFscyBjcmVhdGU6Y2xpZW50X2NyZWRlbnRpYWxzIHVwZGF0ZTpjbGllbnRfY3JlZGVudGlhbHMgZGVsZXRlOmNsaWVudF9jcmVkZW50aWFscyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6IkF4alJYc090cDNMUEt1VEVKSng1Z2lMYzhubGZvbmtWIn0.dA4lZ2NQ0x0KYn6mPZpOfT7pZFey9zClFtbfvo7Sn--Z8leSbYAOKbNo8KWwu6KV2bOGu_ghk2kwJVAAQZnkFHMwtF-8arPXn-azAg-bWocSkOcSLaWAN9DwyvRicCmdHnzLaPCRe9ZAG2HDJPtPB2-kmKUpmIXx4U3OkdCVa_USTJYyExFudJEr7XabhYo0CoWyMlZSuDWIYQNlOPEcAL__rqR5bgSBaMHUtHXACJiMe9Dm4Eom4aWMbvbFlBMawZXfwOBubWAcyL-nP1oED4SoumZeI7_dYnIQEomiA_ayaCIaF2ksP8DprW5A1Ssi82ecDFpu4-xioXgTZMJ5Qg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n     \"passWord\":\"thisiisnewgeneratedpasswrodfortest#12344\",\r\n    \"dateFrom\": 1711789265482,\r\n    \"dateTo\": 1711989265999\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/venodr/transactions",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"venodr",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Sub Vendor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/vendor",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vendor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get payment info using token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\":\"5294 0068 0372 5618 8011\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/payment/token",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"payment",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii0tOW1wYXVlbTVCaXVCcjNINzZGYiJ9.eyJpc3MiOiJodHRwczovL2Rldi13dHNlcGdubzJnY2Mxd3E4LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiIxVUdnSGphVGdRMVBJVWlSUVVwZ0lWNElWU253TW1CWUBjbGllbnRzIiwiYXVkIjoiaGVsbG9faWRlbnRpZmllciIsImlhdCI6MTcxNDgwNTgyNiwiZXhwIjoxNzE0ODkyMjI2LCJzY29wZSI6ImNyZWF0ZTp1c2VyIGdldDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6IjFVR2dIamFUZ1ExUElVaVJRVXBnSVY0SVZTbndNbUJZIiwicGVybWlzc2lvbnMiOlsiY3JlYXRlOnVzZXIiLCJnZXQ6dXNlcnMiXX0.GNgexw3mvj75lfXhbR7cxlkPoh4NSnbRt9tUDrgInM6EEwEBmVy4SHskhd3U-aBa1x60YfLPYOLygVec0bW6n-j2eVPAZR-S4lafklwxvX403t3VcUXIW0Qv0c56GyI43F3xWhTKzrXDgh4UuoAxeof-kDwYyhHyhxprnWJo0eWihRUdsrHvxGivgA7r_zp-BJVS5cL9Vd7ncat1aHEvJ_XVdmyFg0S5gaUEqqBKJNH-ehRiCNna8UvappxlQw2GQ8L5LHsvBFRNM0X4w4jFHXwy83fItSScwXE0dD6ciCcQ-LbWslxBf7GPt-cHntCQkVbMXI248P9keOezWLkInw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://api.goenergee.ng/api/v1",
+			"type": "string"
+		}
+	]
+}
