@@ -15,7 +15,7 @@ const Index = () => {
   const { isError, isLoading, data, refetch: refetchUserData } = useGetAllRecordsQuery();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const tableHeads = ['Check', 'Name', 'Status', 'Created at', 'Action']
+  const tableHeads = ['Check', 'Data', 'Status', 'Date/Range', 'Created at', 'Action']
 
   const formatDate = (dateString) => {
     const options = { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" };
@@ -57,6 +57,7 @@ const Index = () => {
     return <Loading />;
   }
 
+
   return (
     <>
       <div className="flex justify-center items-center -mt-[1vw] w-full">
@@ -83,10 +84,15 @@ const Index = () => {
                     <input type="checkbox" />
                   </TableCell>
                   <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
-                    {item.name}
+                    {item?.file ? 'Custom Data' : item?.noOfPoints + ' points'}
                   </TableCell>
-                  <TableCell className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center ${item?.status === 'Awaiting' ? 'text-yellow-600' : 'text-green-600'}`}>
+                  <TableCell className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center`}>
+                    <p className={`${item?.status == 'Waiting' ? 'text-yellow-600' : item?.status == 'Approved' ? 'text-green-600' : 'text-red-600'}`}>
                     {item.status}
+                    </p>
+                  </TableCell>
+                  <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                    {item?.startDate && item?.endDate? `${formatDate(item.startDate)} - ${formatDate(item.endDate)}` : item?.startDate? `${formatDate(item.startDate)}` : item?.endDate? `${formatDate(item.endDate)}` : ''}
                   </TableCell>
                   <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
                     {formatDate(item.createdAt)}

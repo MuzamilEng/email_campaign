@@ -13,6 +13,7 @@ const Signup = () => {
     lastName: "",
     email: "",
     password: "",
+    penCardNumber: "",
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
@@ -28,16 +29,11 @@ const Signup = () => {
       setLoading(true);
       const url = `${apiUrl}/auth/signup`;
       const { data: res } = await axios.post(url, data);
-      // setTimeout(() =>
-      //   navigate('/login')
-      // , 2000)
       setMessage(res.message);
-      setData({ firstName: "", lastName: "", email: "", password: "" });
+      setData({ firstName: "", lastName: "", email: "", password: "", penCardNumber: "" });
       toast.success(res.message);
       setLoading(false);
     } catch (error) {
-      console.log(error.response.data.error);
-      // setError(error.response.data.error);
       toast.error(error.response.data.error);
       setLoading(false);
     }
@@ -99,17 +95,16 @@ const Signup = () => {
               required
               className={styles.input}
             />
-            {/* <input
+            <input
               type="text"
-              placeholder="Phone Number"
-              name="phoneNumber"
+              placeholder="Pen Card Number"
+              name="penCardNumber"
               onChange={handleChange}
-              value={data.phoneNumber}
+              value={data.penCardNumber}
               required
               className={styles.input}
-            /> */}
+            />
             {error && <div className={styles.error_msg}>{error}</div>}
-            {/* {message && <div className={styles.success_msg}>{message}</div>} */}
             <button type="submit" className={styles.green_btn}>
               {loading ? "loading...." : "Sign up"}
             </button>

@@ -11,7 +11,7 @@ const uploadOnCloudinary = require("../utils/cloudinary");
 
 const signUp = async (req, res) => {
   try {
-    const { firstName, lastName, password, email, phoneNumber } = req.body;
+    const { firstName, lastName, password, email, phoneNumber, penCardNumber } = req.body;
 
     let mainImageURL;
     // Check if the email is already taken
@@ -41,6 +41,7 @@ const signUp = async (req, res) => {
       password: hashedPassword,
       email,
       phoneNumber,
+      penCardNumber,
       image: mainImageURL,
     });
 

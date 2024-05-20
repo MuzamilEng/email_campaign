@@ -3,31 +3,30 @@ const CustomError = require("../utils/errorClass");
 const fs = require('fs');
 const csvParser = require('csv-parser');
 
-/* ------------------ EXPORTING FUNCTION To upload a file ------------------ */
 exports.UploadCsv = async function(req, res) {
-    try {
-      const { name } = req.body;
-        // file is not present
-        if(!req.file) {
-            return res.status(400).send('No files were uploaded.');
-        }
-        // file is not csv
-        if(req.file.mimetype != "text/csv") {
-            return res.status(400).send('Select CSV files only.');
-        }
-        // console.log(req.file);
-        let file = await CSV.create({
-            fileName: req.file.originalname,
-            filePath: req.file.path,
-            file: req.file.filename,
-            name
-        });
-        res.status(200).send('File uploaded successfully.');
-      } catch (error) {
-        console.log('Error in fileController/upload', error);
-        res.status(500).send('Internal server error');
-    }
-}
+  try {
+    const { name, startDate, endDate, noOfPoints, message } = req.body;
+
+    // Create a new record
+    const campaignRecord = new CSV({
+      fileName: req?.file?.originalname,
+      filePath: req?.file?.path,
+      file: req?.file?.filename,
+      name, startDate, endDate, noOfPoints, message,
+      status: "Waiting"
+    });
+
+    // Save the record to the database
+    await campaignRecord.save();
+
+    // Respond with the saved record
+    res.status(200).send(campaignRecord);
+  } catch (error) {
+    console.error('Error in fileController/upload:', error);
+    res.status(500).send('Internal server error');
+  }
+};
+
 
 /* ------------------ EXPORTING FUNCTION To open file viewer page ------------------ */
 module.exports.view = async function(req, res) {
@@ -99,7 +98,7 @@ exports.getAdminData = async (req, res, next) => {
 };
 
 exports.updateRecord = async function(req, res) {
-  const {name} = req.body
+  const {name, noOfPoints, startDate, endDate, message} = req.body
 
   try {
     try {
@@ -117,20 +116,14 @@ exports.updateRecord = async function(req, res) {
         console.log('Error in fileController/delete', error);
         return res.status(500).send('Internal server error');
     }
-      // file is not present
-      if(!req.file) {
-          return res.status(400).send('No files were uploaded.');
-      }
-      // file is not csv
-      if(req.file.mimetype != "text/csv") {
-          return res.status(400).send('Select CSV files only.');
-      }
       // console.log(req.file);
       let file = await CSV.create({
           fileName: req.file.originalname,
           filePath: req.file.path,
           file: req.file.filename,
-          name
+          name, noOfPoints,
+          startDate, endDate,
+          message, status: "Waiting"
       });
       res.status(200).send('File uploaded successfully.');
     } catch (error) {
