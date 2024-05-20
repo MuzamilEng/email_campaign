@@ -39,6 +39,22 @@ export const storeApi = createApi({
       }),
       providesTags: ["User"],
     }),
+    signup: builder.mutation({
+      query: (data) => ({
+        url: "/auth/signup",
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["User"],
+    }),
+    uploadReport: builder.mutation({
+      query: (data) => ({
+        url: "/uploadReport",
+        method: "POST",
+        body: data,
+      }),
+      providesTags: ["User"],
+    }),
     updateRecord: builder.mutation({
       query: ({ id, data }) => ({
         url: `/updateRecord/${id}`,
@@ -74,4 +90,6 @@ export const {
   useGetOnlyWaitingDataQuery,
   useGetOnlyApprovedDataQuery,
   useGetOnlyRejectDataQuery,
+  useUploadReportMutation,
+  useSignupMutation,
 } = storeApi;

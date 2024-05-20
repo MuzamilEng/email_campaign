@@ -9,7 +9,7 @@ const {
   getOnlyWaitingData,
   getOnlyRejectData,
 } = require("../controllers/handleCsv");
-const upload = require("../utils/multer");
+const { upload } = require("../utils/multer");
 router.route("/upload").post(upload.single("dataFile"), UploadCsv);
 router.route("/getAdminData").get(getAdminData);
 router.route("/updateRecord/:id").put(upload.single("file"), updateRecord);

@@ -11,7 +11,8 @@ const uploadOnCloudinary = require("../utils/cloudinary");
 
 const signUp = async (req, res) => {
   try {
-    const { firstName, lastName, password, email, phoneNumber, penCardNumber } = req.body;
+    const { firstName, lastName, password, email, phoneNumber, penCardNumber } =
+      req.body;
 
     let mainImageURL;
     // Check if the email is already taken
@@ -68,13 +69,11 @@ const signUp = async (req, res) => {
 
       return res
         .status(200)
-        .send({ message: "An Email sent to your account please verify" });
+        .send({
+          message: "An Email sent to your account please verify",
+          user: savedUser,
+        });
     }
-
-    res.status(201).json({
-      success: true,
-      user: savedUser,
-    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -88,12 +87,12 @@ const login = (req, res, next) => {
       if (err) {
         return res.status(500).json({ error: "Internal Server Error" });
       }
-      console.log(user, 'user');
+      console.log(user, "user");
 
       if (!user) {
         return res.status(401).json({ error: info?.message });
       }
-      if(user?.verified == false){
+      if (user?.verified == false) {
         return res.status(401).json({ error: "Please verify your email" });
       }
 

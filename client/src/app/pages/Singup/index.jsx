@@ -1,58 +1,70 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Toaster, toast } from "sonner";
+import { useSignupMutation } from "../../store/storeApi";
 
 const Signup = () => {
-  const apiUrl = import.meta.env.VITE_REACT_API_URL;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [data, setData] = useState({
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     penCardNumber: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState();
-  const [error, setError] = useState("");
+
+  const [signupMutation, { isLoading, isError, error, data, isSuccess }] =
+    useSignupMutation();
 
   const handleChange = ({ currentTarget: input }) => {
-    setData({ ...data, [input.name]: input.value });
+    setFormData({ ...formData, [input.name]: input.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const url = `${apiUrl}/auth/signup`;
-      const { data: res } = await axios.post(url, data);
-      setMessage(res.message);
-      setData({ firstName: "", lastName: "", email: "", password: "", penCardNumber: "" });
-      toast.success(res.message);
-      setLoading(false);
-    } catch (error) {
-      toast.error(error.response.data.error);
-      setLoading(false);
+      await signupMutation(formData).unwrap();
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        penCardNumber: "",
+      });
+      toast.success("Registered successfully");
+    } catch (err) {
+      toast.error(err?.data?.error || "Signup failed");
     }
   };
+  if (isSuccess) {
+    navigate("/login");
+    localStorage.setItem("userData", JSON.stringify(data));
+  }
   useEffect(() => {
-    console.log(apiUrl);
-  }, []);
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
+
   return (
     <div className={styles.signup_container}>
       <Toaster position="top-center" />
       <div className={styles.signup_form_container}>
         <div className={styles.left}>
           <h1>...</h1>
-          <img src="/img/signup.jpg" alt="image" className="w-full m-[1vw] max-w-[18vw] rounded-lg" />
+          <img
+            src="/img/signup.jpg"
+            alt="Signup"
+            className="w-full m-[1vw] max-w-[18vw] rounded-lg"
+          />
           <Link to="/login">
             <div className="mt-[1vw]">
-            <button type="button" className={styles.white_btn}>
-              Sing in
-            </button>
+              <button type="button" className={styles.white_btn}>
+                Sign in
+              </button>
             </div>
           </Link>
         </div>
@@ -64,7 +76,7 @@ const Signup = () => {
               placeholder="First Name"
               name="firstName"
               onChange={handleChange}
-              value={data.firstName}
+              value={formData.firstName}
               required
               className={styles.input}
             />
@@ -73,7 +85,7 @@ const Signup = () => {
               placeholder="Last Name"
               name="lastName"
               onChange={handleChange}
-              value={data.lastName}
+              value={formData.lastName}
               required
               className={styles.input}
             />
@@ -82,7 +94,7 @@ const Signup = () => {
               placeholder="Email"
               name="email"
               onChange={handleChange}
-              value={data.email}
+              value={formData.email}
               required
               className={styles.input}
             />
@@ -91,7 +103,7 @@ const Signup = () => {
               placeholder="Password"
               name="password"
               onChange={handleChange}
-              value={data.password}
+              value={formData.password}
               required
               className={styles.input}
             />
@@ -100,13 +112,15 @@ const Signup = () => {
               placeholder="Pen Card Number"
               name="penCardNumber"
               onChange={handleChange}
-              value={data.penCardNumber}
+              value={formData.penCardNumber}
               required
               className={styles.input}
             />
-            {error && <div className={styles.error_msg}>{error}</div>}
+            {isError && (
+              <div className={styles.error_msg}>{error?.data?.error}</div>
+            )}
             <button type="submit" className={styles.green_btn}>
-              {loading ? "loading...." : "Sign up"}
+              {isLoading ? "Loading..." : "Sign up"}
             </button>
           </form>
         </div>

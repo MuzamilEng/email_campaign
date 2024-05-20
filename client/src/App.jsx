@@ -11,7 +11,7 @@ import AdminTable from "./app/pages/AdminTable";
 import ViewCsv from "./app/pages/ViewCsv";
 import { useEffect, useState } from "react";
 function App() {
-  const [admin, setAdmin] = useState(true);
+  const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
   const user = localStorage.getItem("token");
 
