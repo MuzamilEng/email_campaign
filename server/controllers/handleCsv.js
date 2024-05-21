@@ -1,9 +1,9 @@
 const CSV = require("../models/csvModel");
 const CustomError = require("../utils/errorClass");
-const fs = require('fs');
-const csvParser = require('csv-parser');
+const fs = require("fs");
+const csvParser = require("csv-parser");
 
-exports.UploadCsv = async function(req, res) {
+exports.UploadCsv = async function (req, res) {
   try {
     const { name, startDate, endDate, noOfPoints, message } = req.body;
 
@@ -12,8 +12,12 @@ exports.UploadCsv = async function(req, res) {
       fileName: req?.file?.originalname,
       filePath: req?.file?.path,
       file: req?.file?.filename,
-      name, startDate, endDate, noOfPoints, message,
-      status: "Waiting"
+      name,
+      startDate,
+      endDate,
+      noOfPoints,
+      message,
+      status: "Waiting",
     });
 
     // Save the record to the database
@@ -22,67 +26,63 @@ exports.UploadCsv = async function(req, res) {
     // Respond with the saved record
     res.status(200).send(campaignRecord);
   } catch (error) {
-    console.error('Error in fileController/upload:', error);
-    res.status(500).send('Internal server error');
+    console.error("Error in fileController/upload:", error);
+    res.status(500).send("Internal server error");
   }
 };
 
-
 /* ------------------ EXPORTING FUNCTION To open file viewer page ------------------ */
-module.exports.view = async function(req, res) {
-    try {
-        // console.log(req.params);
-        let csvFile = await CSV.findOne({file: req.params.id});
-        // console.log(csvFile);
-        const results = [];
-        const header =[];
-        fs.createReadStream(csvFile.filePath) //seeting up the path for file upload
-        .pipe(csvParser())
-        .on('headers', (headers) => {
-            headers.map((head) => {
-                header.push(head);
-            });
-            // console.log(header);
-        })
-        .on('data', (data) =>
-        results.push(data))
-        .on('end', () => {
-            // console.log(results.length);
-            // console.log(results);
-            res.render("file_viewer", {
-                title: "File Viewer",
-                fileName: csvFile.fileName,
-                head: header,
-                data: results,
-                length: results.length
-            });
+module.exports.view = async function (req, res) {
+  try {
+    // console.log(req.params);
+    let csvFile = await CSV.findOne({ file: req.params.id });
+    // console.log(csvFile);
+    const results = [];
+    const header = [];
+    fs.createReadStream(csvFile.filePath) //seeting up the path for file upload
+      .pipe(csvParser())
+      .on("headers", (headers) => {
+        headers.map((head) => {
+          header.push(head);
         });
-
-
-    } catch (error) {
-        console.log('Error in fileController/view', error);
-        res.status(500).send('Internal server error');
-    }
-}
+        // console.log(header);
+      })
+      .on("data", (data) => results.push(data))
+      .on("end", () => {
+        // console.log(results.length);
+        // console.log(results);
+        res.render("file_viewer", {
+          title: "File Viewer",
+          fileName: csvFile.fileName,
+          head: header,
+          data: results,
+          length: results.length,
+        });
+      });
+  } catch (error) {
+    console.log("Error in fileController/view", error);
+    res.status(500).send("Internal server error");
+  }
+};
 
 /* ------------------ EXPORTING FUNCTION To delete the file ------------------ */
-module.exports.deleteAdminData = async function(req, res) {
+module.exports.deleteAdminData = async function (req, res) {
   try {
     const csvFile = await CSV.findById(req.params.id);
     console.log(csvFile, "csvFile");
-      await  CSV.findByIdAndDelete(req.params.id);
-      console.log("File deleted successfully");
-      fs.unlink(csvFile?.filePath, (err) => {
-          if (err) {
-              console.error('Error deleting the file:', err);
-              return res.status(500).send('Internal server error');
-          }
-      });
+    await CSV.findByIdAndDelete(req.params.id);
+    console.log("File deleted successfully");
+    fs.unlink(csvFile?.filePath, (err) => {
+      if (err) {
+        console.error("Error deleting the file:", err);
+        return res.status(500).send("Internal server error");
+      }
+    });
   } catch (error) {
-      console.log('Error in fileController/delete', error);
-      return res.status(500).send('Internal server error');
+    console.log("Error in fileController/delete", error);
+    return res.status(500).send("Internal server error");
   }
-}
+};
 
 exports.getAdminData = async (req, res, next) => {
   try {
@@ -97,59 +97,60 @@ exports.getAdminData = async (req, res, next) => {
   }
 };
 
-exports.updateRecord = async function(req, res) {
-  const {name, noOfPoints, startDate, endDate, message} = req.body
+exports.updateRecord = async function (req, res) {
+  const { name, noOfPoints, startDate, endDate, message } = req.body;
 
   try {
     try {
       const csvFile = await CSV.findById(req.params.id);
       console.log(csvFile, "csvFile");
-        await  CSV.findByIdAndDelete(req.params.id);
-        console.log("File deleted successfully");
-        fs.unlink(csvFile?.filePath, (err) => {
-            if (err) {
-                console.error('Error deleting the file:', err);
-                return res.status(500).send('Internal server error');
-            }
-        });
-    } catch (error) {
-        console.log('Error in fileController/delete', error);
-        return res.status(500).send('Internal server error');
-    }
-      // console.log(req.file);
-      let file = await CSV.create({
-          fileName: req.file.originalname,
-          filePath: req.file.path,
-          file: req.file.filename,
-          name, noOfPoints,
-          startDate, endDate,
-          message, status: "Waiting"
+      await CSV.findByIdAndDelete(req.params.id);
+      console.log("File deleted successfully");
+      fs.unlink(csvFile?.filePath, (err) => {
+        if (err) {
+          console.error("Error deleting the file:", err);
+          return res.status(500).send("Internal server error");
+        }
       });
-      res.status(200).send('File uploaded successfully.');
     } catch (error) {
-      console.log('Error in fileController/upload', error);
-      res.status(500).send('Internal server error');
+      console.log("Error in fileController/delete", error);
+      return res.status(500).send("Internal server error");
+    }
+    // console.log(req.file);
+    let file = await CSV.create({
+      fileName: req.file.originalname,
+      filePath: req.file.path,
+      file: req.file.filename,
+      name,
+      noOfPoints,
+      startDate,
+      endDate,
+      message,
+      status: "Waiting",
+    });
+    res.status(200).send("File uploaded successfully.");
+  } catch (error) {
+    console.log("Error in fileController/upload", error);
+    res.status(500).send("Internal server error");
   }
-}
+};
 
 /** ------------------ EXPORTING FUNCTION To delete the file ------------------ **/
-module.exports.delete = async function(req, res) {
-    try {
-        // console.log(req.params);
-        let isFile = await CSV.findOne({file: req.params.id});
+module.exports.delete = async function (req, res) {
+  try {
+    // console.log(req.params);
+    let isFile = await CSV.findOne({ _id: req.params.id });
 
-        if(isFile){
-            await CSV.deleteOne({file: req.params.id});            
-            return res.redirect("/");
-        }else{
-            console.log("File not found");
-            return res.redirect("/");
-        }
-    } catch (error) {
-        console.log('Error in fileController/delete', error);
-        return;
+    if (isFile) {
+      await CSV.deleteOne({ _id: req.params.id });
+      // return res.redirect("/");
+      return res.status(200).send("File deleted successfully");
     }
-}
+  } catch (error) {
+    // console.log("Error in fileController/delete", error);
+    return res.status(500).json("message", error.message);
+  }
+};
 
 exports.updateAdminData = async (req, res, next) => {
   try {
@@ -230,4 +231,3 @@ exports.getOnlyWaitingData = async (req, res, next) => {
     });
   }
 };
-

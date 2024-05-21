@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const csvSchema = new mongoose.Schema(
   {
     fileName: String,
-    filePath : String,
+    filePath: String,
     file: String,
     name: String,
     startDate: String,
@@ -12,6 +12,9 @@ const csvSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "Waiting",
+    },
+    reportFile: {
+      type: String,
     },
   },
   { timestamps: true }

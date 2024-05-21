@@ -27,9 +27,6 @@ const userSchema = new mongoose.Schema(
     penCardNumber: {
       type: String,
     },
-    reportFile: {
-      type: String,
-    },
   },
   {
     timestamps: true,

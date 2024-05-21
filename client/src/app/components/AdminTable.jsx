@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,9 +16,11 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/system";
 import { useUploadReportMutation } from "../store/storeApi";
 import { Toaster, toast } from "sonner";
+import { useGlobalContext } from "../context/GlobalStateProvider";
 
 const ActionButton = styled(Button)(({ theme }) => ({
   transition: "transform 0.3s ease-in-out",
@@ -54,27 +56,26 @@ function AdminTable({
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [userId, setUserId] = useState(null);
+  const [csvId, setCsvId] = useState(null);
+  const ref = useRef();
   const [uploadReport, { isLoading, isError, data, isSuccess }] =
     useUploadReportMutation();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  const { userReport, setUserReport } = useGlobalContext();
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   const handleUploadFile = async () => {
-    // Handle file upload logic here
     console.log("Uploading file:", selectedFile);
     const formData = new FormData();
-    formData.append("userId", userId);
+    formData.append("csvId", csvId);
     formData.append("reportFile", selectedFile);
-    await uploadReport(formData);
+    uploadReport(formData);
     setIsModalOpen(false);
-    // Reset selected file
     setSelectedFile(null);
   };
 
@@ -82,14 +83,19 @@ function AdminTable({
     setSelectedFile(event.target.files[0]);
   };
   if (isSuccess) {
-    toast.success("File uploaded successfully");
+    toast.success("File uploaded successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
   useEffect(() => {
-    let id = JSON.parse(localStorage.getItem("userData"));
-    const userId = id?.user?._id ? id.user._id.toString() : null;
-    setUserId(userId);
-
-    console.log(userId, "my userId");
+    let id = JSON.parse(localStorage.getItem("csvData"));
+    setCsvId(id?._id);
   }, []);
 
   return (
@@ -198,28 +204,73 @@ function AdminTable({
           sx={{
             position: "absolute",
             width: 400,
-            bgcolor: "white",
+            bgcolor: "background.paper", // Use theme-based background color
             boxShadow: 24,
             p: 4,
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            borderRadius: 4,
           }}
         >
-          <Typography variant="h6" gutterBottom component="div">
-            Upload Report
-          </Typography>
           <input
             type="file"
+            ref={ref}
             onChange={handleFileInputChange}
-            style={{ marginBottom: "10px" }}
+            hidden
           />
-          <Button onClick={() => setIsModalOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleUploadFile} color="primary">
-            {isLoading ? "Uploading..." : "Upload"}
-          </Button>
+          <label htmlFor="file-upload">
+            <Button
+              component="span"
+              color="primary"
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+              onClick={() => ref.current.click()}
+              fullWidth
+              sx={{
+                mb: 2, // Add margin bottom for spacing
+                borderStyle: "dashed", // Set border style to dashed
+                borderColor: "primary.main", // Set border color to primary color
+                borderWidth: 2, // Set border width
+                borderRadius: 4, // Optional: Set border radius
+                padding: "7vw", // Adjust padding as needed
+              }}
+            >
+              Choose File
+            </Button>
+          </label>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            gutterBottom
+            sx={{ fontWeight: "bold" }}
+          >
+            Selected file:
+            {/* Show selected file name */}
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Tooltip title="Cancel">
+              <Button
+                onClick={() => setIsModalOpen(false)}
+                color="secondary"
+                variant="outlined"
+                sx={{ mr: 1 }}
+              >
+                Cancel
+              </Button>
+            </Tooltip>
+            <Tooltip title="Upload">
+              <Button
+                onClick={handleUploadFile}
+                color="primary"
+                variant="contained"
+                disabled={isLoading}
+                startIcon={<CloudUploadIcon />}
+              >
+                {isLoading ? "Uploading..." : "Upload"}
+              </Button>
+            </Tooltip>
+          </Box>
         </Box>
       </Modal>
     </>

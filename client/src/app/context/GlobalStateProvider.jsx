@@ -16,6 +16,7 @@ export const GlobalStateProvider = ({ children }) => {
     newPassword: "",
     otp: "",
   });
+  const [userReport,setUserReport] = useState({})
   const [globalAdminData, setGlobalAdminData] = useState([]);
   return (
     <GlobalStateContext.Provider
@@ -33,6 +34,7 @@ export const GlobalStateProvider = ({ children }) => {
         setForgetEmail,
         globalAdminData,
         setGlobalAdminData,
+        userReport,setUserReport
       }}
     >
       {children}

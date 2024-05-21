@@ -1,29 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useDeleteAdminDataMutation, useGetAllRecordsQuery } from "../../store/storeApi";
+import {
+  useDeleteAdminDataMutation,
+  useGetAllRecordsQuery,
+} from "../../store/storeApi";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { FormPopup } from "../../components/Popups";
 import { useGlobalContext } from "../../context/GlobalStateProvider";
+import DownloadIcon from "@mui/icons-material/Download";
 import Loading from "../../components/Loading";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, TablePagination } from '@mui/material';
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  TablePagination,
+  Box,
+  Typography,
+} from "@mui/material";
 import DeleteModal from "../../components/DeleteModal";
 import UpdateModal from "../../components/UpdateModal";
 
 const Index = () => {
   const [popup, setPopup] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
-  const { uploadFile } = useGlobalContext();
-  const { isError, isLoading, data, refetch: refetchUserData } = useGetAllRecordsQuery();
+  const { uploadFile, userReport, setUserReport } = useGlobalContext();
+  const {
+    isError,
+    isLoading,
+    data,
+    refetch: refetchUserData,
+  } = useGetAllRecordsQuery();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const tableHeads = ['Check', 'Data', 'Status', 'Date/Range', 'Created at', 'Action']
+  const tableHeads = [
+    "Check",
+    "Data",
+    "Status",
+    "Date/Range",
+    "Created at",
+    "Action",
+  ];
 
   const formatDate = (dateString) => {
-    const options = { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" };
+    const options = {
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
 
-  const [deleteAdminData, { isLoading: isDeleting, isError: deleteError }] = useDeleteAdminDataMutation();
+  const [deleteAdminData, { isLoading: isDeleting, isError: deleteError }] =
+    useDeleteAdminDataMutation();
 
   const showPopup = (id) => {
     setPopup(true);
@@ -53,58 +86,116 @@ const Index = () => {
     setPage(0);
   };
 
+  const handleDownload = (fileName) => {
+    fetch(`http://localhost:5000/temp/${fileName}`)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName.split("/").pop());
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((error) => console.error("Error downloading file:", error));
+  };
+
   if (isLoading) {
     return <Loading />;
   }
-
 
   return (
     <>
       <div className="flex justify-center items-center -mt-[1vw] w-full">
         {isError && <div>Error loading data</div>}
-        <TableContainer component={Paper} className="w-full max-w-[70vw] shadow rounded mt-[2vw]">
+        <TableContainer
+          component={Paper}
+          className="w-full max-w-[70vw] shadow rounded mt-[2vw]"
+        >
           <Table>
             <TableHead className="">
-            <TableRow>
-						{tableHeads?.map((item, index)=> (
-						<TableCell key={index} style={{ fontWeight: 'bold' }}
-						className='text-md px-6 py-2 border-r border-solid w-1/6 text-start whitespace-nowrap hover:bg-[#d4f1ff]'>
-							{item}
-						</TableCell>
-						))}
-					</TableRow>
+              <TableRow>
+                {tableHeads?.map((item, index) => (
+                  <TableCell
+                    key={index}
+                    style={{ fontWeight: "bold" }}
+                    className="text-md px-6 py-2 border-r border-solid w-1/6 text-start whitespace-nowrap hover:bg-[#d4f1ff]"
+                  >
+                    {item}
+                  </TableCell>
+                ))}
+              </TableRow>
             </TableHead>
             <TableBody>
-              {data?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-                <TableRow
-                  key={index}
-                  className={'hover:bg-[#f0faff]'}
-                >
-                  <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
-                    <input type="checkbox" />
-                  </TableCell>
-                  <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
-                    {item?.file ? 'Custom Data' : item?.noOfPoints + ' points'}
-                  </TableCell>
-                  <TableCell className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center`}>
-                    <p className={`${item?.status == 'Waiting' ? 'text-yellow-600' : item?.status == 'Approved' ? 'text-green-600' : 'text-red-600'}`}>
-                    {item.status}
-                    </p>
-                  </TableCell>
-                  <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
-                    {item?.startDate && item?.endDate? `${formatDate(item.startDate)} - ${formatDate(item.endDate)}` : item?.startDate? `${formatDate(item.startDate)}` : item?.endDate? `${formatDate(item.endDate)}` : ''}
-                  </TableCell>
-                  <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
-                    {formatDate(item.createdAt)}
-                  </TableCell>
-                  <TableCell className='text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer'>
-                    <div className="flex gap-2 justify-center">
-                     <UpdateModal id={item?._id} />
-                      <DeleteModal id={item?._id} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {data?.data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item, index) => (
+                  <TableRow key={index} className={"hover:bg-[#f0faff]"}>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      <input type="checkbox" />
+                    </TableCell>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      {item?.file
+                        ? "Custom Data"
+                        : item?.noOfPoints + " points"}
+                    </TableCell>
+                    <TableCell
+                      className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center`}
+                    >
+                      <p
+                        className={`${
+                          item?.status == "Waiting"
+                            ? "text-yellow-600"
+                            : item?.status == "Approved"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {item.status}
+                      </p>
+                    </TableCell>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      {item?.startDate && item?.endDate
+                        ? `${formatDate(item.startDate)} - ${formatDate(
+                            item.endDate
+                          )}`
+                        : item?.startDate
+                        ? `${formatDate(item.startDate)}`
+                        : item?.endDate
+                        ? `${formatDate(item.endDate)}`
+                        : ""}
+                    </TableCell>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      {formatDate(item.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      <div className="flex gap-2 justify-center">
+                        <UpdateModal id={item?._id} />
+                        <DeleteModal id={item?._id} />
+                        {item?.reportFile && (
+                          <Box
+                            className="text-blue-500 cursor-pointer"
+                            onClick={() => handleDownload(item.reportFile)}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              cursor: "pointer",
+                              color: "primary.main",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            <DownloadIcon />
+                            <Typography variant="body2" component="span">
+                              Download
+                            </Typography>
+                          </Box>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           <TablePagination
