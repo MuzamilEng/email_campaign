@@ -16,11 +16,13 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import styled from "@mui/material/styles/styled";
+
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from "@mui/system";
 import { useUploadReportMutation } from "../store/storeApi";
 import { Toaster, toast } from "sonner";
 import { useGlobalContext } from "../context/GlobalStateProvider";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const ActionButton = styled(Button)(({ theme }) => ({
   transition: "transform 0.3s ease-in-out",
@@ -46,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function AdminTable({
   globalAdminData,
   updateStatus,
-  handleDownload,
+
   formatDate,
   removeInitialPath,
   isUpdating,
@@ -57,6 +59,7 @@ function AdminTable({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [csvId, setCsvId] = useState(null);
+  const [csvFilename, setFilename] = useState(null);
   const ref = useRef();
   const [uploadReport, { isLoading, isError, data, isSuccess }] =
     useUploadReportMutation();
@@ -93,11 +96,47 @@ function AdminTable({
       progress: undefined,
     });
   }
+  const handleDownload = (fileName) => {
+    if (!fileName) {
+      console.error("File name is undefined or empty");
+      return;
+    }
+
+    const fileUrl = `http://localhost:5173/public/csv/${fileName}`;
+    console.log(`Downloading file from URL: ${fileUrl}`);
+
+    fetch(fileUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName.split("/").pop()); // Ensure fileName is not undefined here
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((error) => {
+        console.error("Error downloading file:", error);
+      });
+  };
+
   useEffect(() => {
     let id = JSON.parse(localStorage.getItem("csvData"));
-    setCsvId(id?._id);
-  }, []);
+    setCsvId(id?.campaignRecord?._id);
+    console.log(id);
+    setFilename(id?.fileName);
+  }, [csvId, setCsvId, setFilename, csvFilename]);
 
+  console.log(csvFilename, "mycsv file");
+  console.log(csvId, "mycsv id");
   return (
     <>
       <Toaster />
@@ -121,6 +160,11 @@ function AdminTable({
                 <StyledTableCell
                   style={{ textAlign: "center", fontWeight: "bold" }}
                 >
+                  Files
+                </StyledTableCell>
+                <StyledTableCell
+                  style={{ textAlign: "center", fontWeight: "bold" }}
+                >
                   Action
                 </StyledTableCell>
               </TableRow>
@@ -138,6 +182,27 @@ function AdminTable({
                       {formatDate(item.createdAt)}
                     </StyledTableCell>
                     <StyledTableCell>{item.status}</StyledTableCell>
+                    <StyledTableCell>
+                      <Tooltip title="download" arrow>
+                        <Box
+                          className="text-blue-500 cursor-pointer"
+                          onClick={() => handleDownload(csvFilename)}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            cursor: "pointer",
+                            color: "primary.main",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          <DownloadIcon />
+                          <Typography variant="body2" component="span">
+                            Download
+                          </Typography>
+                        </Box>
+                      </Tooltip>
+                    </StyledTableCell>
                     <StyledTableCell>
                       <div className="flex gap-4 justify-center">
                         <Tooltip title="Reject this item" arrow>
@@ -160,19 +225,7 @@ function AdminTable({
                             {isDeleting ? "approved..." : "Approved"}
                           </ActionButton>
                         </Tooltip>
-                        <Tooltip title="View details" arrow>
-                          <ActionButton
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                              const newPath = removeInitialPath(item.filePath);
-                              handleDownload(`/temp/${newPath}`);
-                              console.log(newPath);
-                            }}
-                          >
-                            View
-                          </ActionButton>
-                        </Tooltip>
+
                         <Tooltip title="Upload report" arrow>
                           <ActionButton
                             variant="contained"

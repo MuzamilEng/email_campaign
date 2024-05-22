@@ -19,6 +19,7 @@ import {
   TablePagination,
   Box,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import DeleteModal from "../../components/DeleteModal";
 import UpdateModal from "../../components/UpdateModal";
@@ -41,6 +42,7 @@ const Index = () => {
     "Status",
     "Date/Range",
     "Created at",
+    "Report Name",
     "Action",
   ];
 
@@ -170,10 +172,8 @@ const Index = () => {
                       {formatDate(item.createdAt)}
                     </TableCell>
                     <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
-                      <div className="flex gap-2 justify-center">
-                        <UpdateModal id={item?._id} />
-                        <DeleteModal id={item?._id} />
-                        {item?.reportFile && (
+                      {item?.reportFile ? (
+                        <Tooltip title="Download Report">
                           <Box
                             className="text-blue-500 cursor-pointer"
                             onClick={() => handleDownload(item.reportFile)}
@@ -191,7 +191,15 @@ const Index = () => {
                               Download
                             </Typography>
                           </Box>
-                        )}
+                        </Tooltip>
+                      ) : (
+                        "No Report"
+                      )}
+                    </TableCell>
+                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                      <div className="flex gap-2 justify-center">
+                        <UpdateModal id={item?._id} />
+                        <DeleteModal id={item?._id} />
                       </div>
                     </TableCell>
                   </TableRow>

@@ -23,8 +23,11 @@ exports.UploadCsv = async function (req, res) {
     // Save the record to the database
     await campaignRecord.save();
 
-    // Respond with the saved record
-    res.status(200).send(campaignRecord);
+    // Respond with the saved record and filename
+    res.status(200).json({
+      campaignRecord,
+      fileName: req?.file?.originalname, // Include the filename in the response
+    });
   } catch (error) {
     console.error("Error in fileController/upload:", error);
     res.status(500).send("Internal server error");
