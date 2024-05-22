@@ -63,6 +63,7 @@ function AdminTable({
   const ref = useRef();
   const [uploadReport, { isLoading, isError, data, isSuccess }] =
     useUploadReportMutation();
+  const [mainId, setId] = useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -75,7 +76,7 @@ function AdminTable({
   const handleUploadFile = async () => {
     console.log("Uploading file:", selectedFile);
     const formData = new FormData();
-    formData.append("csvId", csvId);
+    formData.append("csvId", mainId);
     formData.append("reportFile", selectedFile);
     uploadReport(formData);
     setIsModalOpen(false);
@@ -135,8 +136,6 @@ function AdminTable({
     setFilename(id?.fileName);
   }, [csvId, setCsvId, setFilename, csvFilename]);
 
-  console.log(csvFilename, "mycsv file");
-  console.log(csvId, "mycsv id");
   return (
     <>
       <Toaster />
@@ -230,7 +229,11 @@ function AdminTable({
                           <ActionButton
                             variant="contained"
                             color="primary"
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                              setIsModalOpen(true);
+                              setId(item?._id);
+                              console.log(mainId, "mmmm");
+                            }}
                           >
                             Upload report
                           </ActionButton>
