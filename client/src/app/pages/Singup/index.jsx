@@ -40,6 +40,7 @@ const Signup = () => {
     }
   };
   if (isSuccess) {
+    toast.success("Registered successfully you will recieve a message shortly");
     navigate("/login");
     localStorage.setItem("userData", JSON.stringify(data));
   }
@@ -113,6 +114,15 @@ const Signup = () => {
               name="penCardNumber"
               onChange={handleChange}
               value={formData.penCardNumber}
+              required
+              className={styles.input}
+            />
+            <input
+              type="text"
+              placeholder="Phone number"
+              name="phoneNumber"
+              onChange={handleChange}
+              value={formData.phoneNumber}
               required
               className={styles.input}
             />

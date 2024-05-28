@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
@@ -12,7 +14,6 @@ const adminRoute = require("./routes/adminRoutes");
 const path = require("path");
 const errorHandler = require("./middleware/error-handler");
 const port = process.env.PORT || 5000;
-require("dotenv").config({ path: ".env" });
 
 connectDB();
 

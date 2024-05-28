@@ -41,7 +41,7 @@ const Sidebar = () => {
   const handleAdminData = (title) => {
     if (title === "Pending Requests") {
       setGlobalAdminData(data3?.data);
-      console.log("Pending Requests");
+      // console.log("Pending Requests");
     }
     if (title === "Approved Requests") {
       console.log(data.data);
@@ -49,11 +49,11 @@ const Sidebar = () => {
     }
     if (title === "Reject Requests") {
       setGlobalAdminData(data2?.data);
-      console.log("Rejected Requests");
+      // console.log("Rejected Requests");
     }
     if (title === "All") {
       setGlobalAdminData(data4?.data);
-      console.log("Rejected Requests");
+      // console.log("Rejected Requests");
     }
   };
   // console.log(data, "sidebarrrr");
