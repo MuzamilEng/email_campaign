@@ -2,11 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const API_KEY = import.meta.env.VITE_REACT_API_URL;
 // console.log(API_KEY);
 //  https://infra.chequelivros.net/bookstores
-
+const token = JSON.parse(localStorage.getItem("token"));
 export const storeApi = createApi({
   reducerPath: "storeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_KEY}` }),
-  tagTypes: ["Post", "User"],
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${API_KEY}`,
+    prepareHeaders: (headers) => {
+      headers.set("Authorization", `Bearer ${token?.token}`);
+    },
+  }),
+  tagTypes: ["Post", "currentUser"],
   endpoints: (builder) => ({
     getAllRecords: builder.query({
       query: () => `/getAdminData`,
@@ -31,13 +36,17 @@ export const storeApi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
+    getLogedinUser: builder.query({
+      query: () => `/getCurrentUser`,
+      providesTags: ["currentUser"],
+    }),
     submitForm: builder.mutation({
       query: (data) => ({
         url: "/upload",
         method: "POST",
         body: data,
       }),
-      providesTags: ["User"],
+      invalidatesTags: ["currentUser"],
     }),
     signup: builder.mutation({
       query: (data) => ({
@@ -92,4 +101,5 @@ export const {
   useGetOnlyRejectDataQuery,
   useUploadReportMutation,
   useSignupMutation,
+  useGetLogedinUserQuery,
 } = storeApi;

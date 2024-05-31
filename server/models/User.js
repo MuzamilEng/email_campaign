@@ -27,6 +27,16 @@ const userSchema = new mongoose.Schema(
     penCardNumber: {
       type: String,
     },
+    totalInvoices: [
+      {
+        fileName: {
+          type: String,
+        },
+        timeStamps: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

@@ -2,12 +2,17 @@ const CSV = require("../models/csvModel");
 const CustomError = require("../utils/errorClass");
 const fs = require("fs");
 const csvParser = require("csv-parser");
-
+const User = require("../models/User");
+const dayjs = require("dayjs");
 exports.UploadCsv = async function (req, res) {
   try {
-    const { name, startDate, endDate, noOfPoints, message } = req.body;
-
+    const { name, startDate, endDate, noOfPoints, message, id } = req.body;
+    console.log(id, "you id");
     // Create a new record
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const campaignRecord = new CSV({
       fileName: req?.file?.originalname,
       filePath: req?.file?.path,
@@ -22,8 +27,14 @@ exports.UploadCsv = async function (req, res) {
 
     // Save the record to the database
     await campaignRecord.save();
+    const formattedTimestamp = dayjs().format("MMMM D, YYYY");
+    user.totalInvoices.push({
+      fileName: req?.file?.originalname,
+      timeStamps: formattedTimestamp,
+    });
 
     // Respond with the saved record and filename
+    await user.save();
     res.status(200).json({
       campaignRecord,
       fileName: req?.file?.originalname, // Include the filename in the response

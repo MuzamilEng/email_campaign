@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Toaster, toast } from "sonner";
 import axios from "axios";
@@ -44,6 +44,7 @@ const Form = () => {
   });
   const [submitData, { isLoading, isError, error, isSuccess, success }] =
     useSubmitFormMutation();
+  const [userId, setUserId] = useState("");
   const handleFileChange = (file) => {
     setRecordFile(file);
   };
@@ -55,6 +56,14 @@ const Form = () => {
     setOpen(true);
   };
   const onSubmit = async () => {
+    if (
+      !dayjs(campaignDetails.startDate).isValid() ||
+      !dayjs(campaignDetails.endDate).isValid()
+    ) {
+      toast.error("Please select valid start and end dates");
+      return;
+    }
+    console.log(campaignDetails.startDate.$d, "dddateStart");
     try {
       const formData = new FormData();
       for (const key in campaignDetails) {
@@ -64,7 +73,9 @@ const Form = () => {
       if (recordFile) {
         formData.append("dataFile", recordFile);
       }
+
       const response = await submitData(formData);
+
       setUploadFile(true);
       localStorage.setItem("csvData", JSON.stringify(response?.data));
       toast.success("File uploaded successfully");
@@ -75,6 +86,12 @@ const Form = () => {
       // Handle error
     }
   };
+  useEffect(() => {
+    const id = JSON.parse(localStorage.getItem("token"));
+    campaignDetails.id = id?.user?._id;
+    setUserId(id?.user?._id);
+  }, []);
+  // console.log(userId, "iiiiidddd");
   return (
     <main className="flex w-full justify-center p-[1vw] items-center">
       <Toaster position="top-center" />
@@ -184,15 +201,3 @@ const Form = () => {
 };
 
 export default Form;
-
-{
-  /* <form onSubmit={handleSubmit(onSubmit)}
-        className="shadow-md w-full flex flex-col form_bg items-center  max-w-[50vw] border-dashed p-[1vw] rounded-md bg- bg-opacity-90"
-      >
-        <Icon className="text-[3vw] text-blue-700" icon="fluent:folder-add-20-regular" />
-        <p className="text-[1vw] font-medium mt-[0.7vw] text-black">Click to Upload or Drop CSV here</p>
-        <span className="text-[0.8vw] font-medium mt-[0.7vw] text-gray-600">Upload up to 1 file at once. Upgrade for more</span>
-        <figure className=" cursor-pointer" ><FileUpload handleFile={handleFileChange} /></figure>
-        <button disabled={!selectedFile} className="mt-[1vw] bg-blue-700 w-full max-w-[6vw] hover:bg-blue-800  text-center items-center flex justify-center text-white p-[0.7vw] rounded-md" type="submit"><Icon icon="formkit:submit" className="text-[1vw]" />Submit</button>
-      </form>  */
-}

@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import DeleteModal from "../../components/DeleteModal";
 import UpdateModal from "../../components/UpdateModal";
+import { InvoiceDetail } from "../../components/InvoiceDetail";
 
 const Index = () => {
   const [popup, setPopup] = useState(false);
@@ -218,6 +219,7 @@ const Index = () => {
         </TableContainer>
       </div>
       {/* {popup && <FormPopup setPopup={setPopup} id={idToDelete} />} */}
+      <InvoiceDetail />
     </>
   );
 };
