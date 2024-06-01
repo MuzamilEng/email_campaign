@@ -7,7 +7,7 @@ const dayjs = require("dayjs");
 exports.UploadCsv = async function (req, res) {
   try {
     const { name, startDate, endDate, noOfPoints, message, id } = req.body;
-    console.log(id, "you id");
+    // console.log(id, "you id");
     // Create a new record
     const user = await User.findById(id);
     if (!user) {
@@ -40,7 +40,7 @@ exports.UploadCsv = async function (req, res) {
       fileName: req?.file?.originalname, // Include the filename in the response
     });
   } catch (error) {
-    console.error("Error in fileController/upload:", error);
+    // console.error("Error in fileController/upload:", error);
     res.status(500).send("Internal server error");
   }
 };

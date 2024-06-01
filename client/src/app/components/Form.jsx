@@ -45,6 +45,8 @@ const Form = () => {
   const [submitData, { isLoading, isError, error, isSuccess, success }] =
     useSubmitFormMutation();
   const [userId, setUserId] = useState("");
+  const [calculatedPoints, setCalculatedPoints] = useState(0);
+
   const handleFileChange = (file) => {
     setRecordFile(file);
   };
@@ -91,7 +93,18 @@ const Form = () => {
     campaignDetails.id = id?.user?._id;
     setUserId(id?.user?._id);
   }, []);
-  // console.log(userId, "iiiiidddd");
+
+  useEffect(() => {
+    if (showPointFields && campaignDetails.noOfPoints) {
+      const points = parseInt(campaignDetails.noOfPoints, 10);
+      if (!isNaN(points)) {
+        setCalculatedPoints(points * 50);
+      } else {
+        setCalculatedPoints(0);
+      }
+    }
+  }, [showPointFields, campaignDetails.noOfPoints]);
+
   return (
     <main className="flex w-full justify-center p-[1vw] items-center">
       <Toaster position="top-center" />
@@ -129,23 +142,37 @@ const Form = () => {
                   </span>
                 </section>
                 {showPointFields && (
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="noOfPoints"
-                    label="No of points"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    value={campaignDetails?.noOfPoints}
-                    onChange={(event) =>
-                      setCampaignDetails({
-                        ...campaignDetails,
-                        noOfPoints: event.target.value,
-                      })
-                    }
-                    required // Mark the field as required
-                  />
+                  <>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="noOfPoints"
+                      label="No of points"
+                      type="text"
+                      fullWidth
+                      variant="outlined"
+                      value={campaignDetails?.noOfPoints}
+                      onChange={(event) =>
+                        setCampaignDetails({
+                          ...campaignDetails,
+                          noOfPoints: event.target.value,
+                        })
+                      }
+                      required // Mark the field as required
+                    />
+                    <TextField
+                      margin="dense"
+                      id="calculatedPoints"
+                      label="Calculated Points"
+                      type="text"
+                      fullWidth
+                      variant="outlined"
+                      value={calculatedPoints}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </>
                 )}
                 <div className="mt-[1vw]">
                   <DateRangePicker
