@@ -111,8 +111,7 @@ const Index = () => {
   return (
     <>
       <div className="flex justify-center items-center -mt-[1vw] w-full">
-        {isError && <div>Error loading data</div>}
-        <TableContainer
+      {isError && <div className="flex fixed inset-0 text-[1vw] text-gray-800 justify-center items-center w-full h-screen">Error loading data! please try again later</div>}        <TableContainer
           component={Paper}
           className="w-full max-w-[70vw] shadow rounded mt-[2vw]"
         >

@@ -65,7 +65,7 @@ const Form = () => {
       toast.error("Please select valid start and end dates");
       return;
     }
-    console.log(campaignDetails.startDate.$d, "dddateStart");
+    // console.log(campaignDetails.startDate.$d, "dddateStart");
     try {
       const formData = new FormData();
       for (const key in campaignDetails) {
@@ -81,6 +81,8 @@ const Form = () => {
       setUploadFile(true);
       localStorage.setItem("csvData", JSON.stringify(response?.data));
       toast.success("File uploaded successfully");
+      setOpen(false);
+      setCampaignDetails({})
       refetch();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -163,7 +165,7 @@ const Form = () => {
                     <TextField
                       margin="dense"
                       id="calculatedPoints"
-                      label="Calculated Points"
+                      label="Calculated Price"
                       type="text"
                       fullWidth
                       variant="outlined"

@@ -232,7 +232,7 @@ function AdminTable({
                             onClick={() => {
                               setIsModalOpen(true);
                               setId(item?._id);
-                              console.log(mainId, "mmmm");
+                              // console.log(mainId, "mmmm");
                             }}
                           >
                             Upload report

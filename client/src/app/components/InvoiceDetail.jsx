@@ -113,14 +113,14 @@ export function InvoiceDetail() {
         <Typography variant="body1">Loading...</Typography>
       ) : isError ? (
         <Typography variant="body1" color="error">
-          Error loading data
+         No record Found
         </Typography>
       ) : (
         <List>
           {data?.totalInvoices?.filter(filterByMonth).map((invoice, index) => (
             <ListItemStyled key={index}>
               <ListItemText
-                primary={`File Name: ${invoice.fileName}`}
+                primary={`File Name: ${invoice.fileName ? invoice.fileName : "Custom points"}`}
                 secondary={`Time Stamps: ${invoice.timeStamps}`}
               />
             </ListItemStyled>
