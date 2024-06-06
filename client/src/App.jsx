@@ -10,6 +10,7 @@ import UserTable from "./app/pages/UserTable";
 import AdminTable from "./app/pages/AdminTable";
 import ViewCsv from "./app/pages/ViewCsv";
 import { useEffect, useState } from "react";
+import Invoices from "./app/pages/Invoices";
 function App() {
   const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function App() {
       <Route path="/forgetPassword" element={<ForgetPassword />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/invoices" element={<Invoices />} />
       <Route path="/adminTable" element={<AdminTable />} />
       <Route path="/csv" element={<ViewCsv />} />
     </Routes>

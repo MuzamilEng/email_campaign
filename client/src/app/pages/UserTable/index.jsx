@@ -23,7 +23,6 @@ import {
 } from "@mui/material";
 import DeleteModal from "../../components/DeleteModal";
 import UpdateModal from "../../components/UpdateModal";
-import { InvoiceDetail } from "../../components/InvoiceDetail";
 
 const Index = () => {
   const [popup, setPopup] = useState(false);
@@ -39,9 +38,7 @@ const Index = () => {
   const [page, setPage] = useState(0);
   const tableHeads = [
     "Check",
-    "Data",
     "Status",
-    "Date/Range",
     "Created at",
     "Report Name",
     "Action",
@@ -137,11 +134,11 @@ const Index = () => {
                     <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
                       <input type="checkbox" />
                     </TableCell>
-                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                    {/* <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
                       {item?.file
                         ? "Custom Data"
                         : item?.noOfPoints + " points"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center`}
                     >
@@ -157,7 +154,7 @@ const Index = () => {
                         {item.status}
                       </p>
                     </TableCell>
-                    <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                    {/* <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
                       {item?.startDate && item?.endDate
                         ? `${formatDate(item.startDate)} - ${formatDate(
                             item.endDate
@@ -167,7 +164,7 @@ const Index = () => {
                         : item?.endDate
                         ? `${formatDate(item.endDate)}`
                         : ""}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
                       {formatDate(item.createdAt)}
                     </TableCell>
@@ -217,8 +214,6 @@ const Index = () => {
           />
         </TableContainer>
       </div>
-      {/* {popup && <FormPopup setPopup={setPopup} id={idToDelete} />} */}
-      <InvoiceDetail />
     </>
   );
 };

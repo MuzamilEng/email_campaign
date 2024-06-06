@@ -16,7 +16,7 @@ export const FileUpload = ({ handleFile }) => {
     <Icon icon="uil:file-alt" className='text-[4.5vw] md:text-[1.5vw] cursor-pointer' />
     <p className="text-[1vw]">Upload File</p>
       <input
-        type="file"
+        type="file" accept=".csv"
         onChange={handleChange}
         ref={hiddenFileInput}
         style={{ display: "none" }}

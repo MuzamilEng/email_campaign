@@ -58,14 +58,14 @@ const Form = () => {
     setOpen(true);
   };
   const onSubmit = async () => {
-    // if (
-    //   !dayjs(campaignDetails.startDate).isValid() ||
-    //   !dayjs(campaignDetails.endDate).isValid()
-    // ) {
-    //   toast.error("Please select valid start and end dates");
-    //   return;
-    // }
-    // // console.log(campaignDetails.startDate.$d, "dddateStart");
+    if (
+      !dayjs(campaignDetails.startDate).isValid() ||
+      !dayjs(campaignDetails.endDate).isValid()
+    ) {
+      toast.error("Please select valid start and end dates");
+      return;
+    }
+    // console.log(campaignDetails.startDate.$d, "dddateStart");
     try {
       const formData = new FormData();
       for (const key in campaignDetails) {

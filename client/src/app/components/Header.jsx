@@ -11,7 +11,11 @@ const Header = () => {
       </figure>
       <h2 className="text-[0.7vw] font-bold text-white">WAHIX DEVELOPEMENT</h2>
         <h4 className="text-[0.4vw] font-bold text-white">DIGITAL MARKETING PIONEERS</h4>
-      </nav>
+      </nav> 
+      <div className="flex w-full max-w-[20vw] justify-around items-center">
+        <Link className="text-[1vw] hover:bg-slate-500 hover:rounded-md p-[0.5vw] text-white" to="/dashboard">Dashboard</Link>
+        <Link className="text-[1vw] hover:bg-slate-500 hover:rounded-md p-[0.5vw] text-white" to="/invoices">Invoices</Link>
+      </div>
     </header>
   );
 };

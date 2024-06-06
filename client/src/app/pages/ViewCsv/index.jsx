@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context/GlobalStateProvider";
 
-const Index = () => {
+const ViewCsv = () => {
   const { csvViewData } = useGlobalContext();
   const [columns, setColumns] = useState([]);
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
     // Extract column names
-    if (csvViewData.length > 0) {
+    if (csvViewData?.length > 0) {
       setColumns(Object.keys(csvViewData[0]));
       setRecords(csvViewData);
     }
@@ -16,7 +16,7 @@ const Index = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">CSV Data Table</h1>
+      {csvViewData?.length > 0 &&  <h1 className="text-3xl font-bold mb-6 text-gray-800">Invoice Details</h1>}
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
@@ -54,4 +54,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default ViewCsv;

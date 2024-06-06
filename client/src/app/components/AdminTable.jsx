@@ -132,7 +132,6 @@ function AdminTable({
   useEffect(() => {
     let id = JSON.parse(localStorage.getItem("csvData"));
     setCsvId(id?.campaignRecord?._id);
-    console.log(id);
     setFilename(id?.fileName);
   }, [csvId, setCsvId, setFilename, csvFilename]);
 
@@ -176,7 +175,7 @@ function AdminTable({
                     <StyledTableCell>
                       <Checkbox />
                     </StyledTableCell>
-                    <StyledTableCell>{item.name}</StyledTableCell>
+                    <StyledTableCell>{item.name ? item.name : "User"}</StyledTableCell>
                     <StyledTableCell>
                       {formatDate(item.createdAt)}
                     </StyledTableCell>
