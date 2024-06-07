@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { useGetAllRecordsQuery, useGetLogedinUserQuery } from "../store/storeApi";
+import { useGetAllRecordsQuery, useGetInvoicesDetailsQuery, useGetLogedinUserQuery } from "../store/storeApi";
 import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { styled } from "@mui/system";
 import Divider from "@mui/material/Divider";
@@ -54,7 +54,10 @@ const Header = styled(Box)({
 export function InvoiceDetail() {
   const [open, setOpen] = React.useState(false);
   const [searchMonth, setSearchMonth] = React.useState("");
-  const { isLoading, isError, data } = useGetAllRecordsQuery();
+  // const { isLoading, isError, data } = useGetAllRecordsQuery();
+  const {data: invoicesDetails, isLoading, isError} = useGetInvoicesDetailsQuery();
+  
+
   const handleView = (fileName) => {
     window.open(`/csv/${fileName}`, "_blank");
   };
@@ -68,6 +71,7 @@ export function InvoiceDetail() {
     fetchCsvData(filePath, (csvData) => {
       if (csvData.length > 0) {
         setCsvViewData(csvData);
+        console.log(csvData, "csv data");
         // navigate("/csv"); // Assuming navigate is obtained from useNavigate hook
       }
     });
@@ -143,18 +147,18 @@ export function InvoiceDetail() {
         </Typography>
       ) : (
         <List>
-          {data?.data?.filter(filterByMonth)?.map((invoice, index) => (
-            <ListItemStyled key={index}>
+          {/* {data?.data?.filter(filterByMonth)?.map((invoice, index) => ( */}
+            <ListItemStyled >
               <ListItemText onClick={() => {
-                const newPath = removeInitialPath(invoice?.filePath);
+                const newPath = invoicesDetails?.data?.filePath;
                 handleDownload(`/csv/${newPath}`);
                 setOpen(false);
               }}
-                primary={`File Name: ${invoice.fileName ? invoice.fileName : "Custom points"}`}
-                secondary={`Time Stamps: ${invoice.createdAt}`}
+                primary={`File Name: ${invoicesDetails?.data?.fileName ? invoicesDetails?.data?.fileName : "Custom points"}`}
+                secondary={`Time Stamps: ${invoicesDetails?.data?.createdAt}`}
               />
             </ListItemStyled>
-          ))}
+          {/* ))} */}
         </List>
       )}
     </DrawerContent>

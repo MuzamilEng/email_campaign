@@ -3,12 +3,10 @@ const CustomError = require("../utils/errorClass");
 const fs = require("fs");
 const csvParser = require("csv-parser");
 const User = require("../models/User");
-const dayjs = require("dayjs");
+const Invoice = require("../models/invoices");
 exports.UploadCsv = async function (req, res) {
   try {
-    const { name, startDate, endDate, noOfPoints, message, id } = req.body;
-    // console.log(id, "you id");
-    // Create a new record
+    const { name, noOfPoints, id } = req.body;
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -18,23 +16,20 @@ exports.UploadCsv = async function (req, res) {
       filePath: req?.file?.path,
       file: req?.file?.filename,
       name,
-      startDate,
-      endDate,
       noOfPoints,
-      message,
       status: "Waiting",
     });
 
     // Save the record to the database
     await campaignRecord.save();
-    const formattedTimestamp = dayjs().format("MMMM D, YYYY");
-    user.totalInvoices.push({
-      fileName: req?.file?.originalname,
-      timeStamps: formattedTimestamp,
-    });
+    // const formattedTimestamp = dayjs().format("MMMM D, YYYY");
+    // user.totalInvoices.push({
+    //   fileName: req?.file?.originalname,
+    //   timeStamps: formattedTimestamp,
+    // });
 
-    // Respond with the saved record and filename
-    await user.save();
+    // // Respond with the saved record and filename
+    // await user.save();
     res.status(200).json({
       campaignRecord,
       fileName: req?.file?.originalname, // Include the filename in the response
@@ -45,6 +40,41 @@ exports.UploadCsv = async function (req, res) {
   }
 };
 
+exports.Invoice = async function (req, res) {
+  try {
+    const invoiceRecord = new Invoice({
+      fileName: req?.file?.originalname,
+      filePath: req?.file?.path,
+      file: req?.file?.filename,
+    });
+    // Save the record to the database
+    await invoiceRecord.save();
+    res.status(200).json({
+      invoiceRecord,
+      fileName: req?.file?.originalname, // Include the filename in the response
+    });
+  } catch (error) {
+    // console.error("Error in fileController/upload:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+exports.getInvoicesDetails = async (req, res, next) => {
+  try {
+    const latestInvoice = await Invoice.findOne().sort({ updatedAt: -1 });
+
+    if (!latestInvoice) {
+      return next(new CustomError('No invoices found', 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      data: latestInvoice,
+    });
+  } catch (err) {
+    console.log(err.message);
+    return next(new CustomError(err.message, 500));
+  }
+};
 /* ------------------ EXPORTING FUNCTION To open file viewer page ------------------ */
 module.exports.view = async function (req, res) {
   try {
@@ -112,7 +142,7 @@ exports.getAdminData = async (req, res, next) => {
 };
 
 exports.updateRecord = async function (req, res) {
-  const { name, noOfPoints, startDate, endDate, message } = req.body;
+  const { name, noOfPoints } = req.body;
 
   try {
     try {
@@ -137,9 +167,6 @@ exports.updateRecord = async function (req, res) {
       file: req.file.filename,
       name,
       noOfPoints,
-      startDate,
-      endDate,
-      message,
       status: "Waiting",
     });
     res.status(200).send("File uploaded successfully.");

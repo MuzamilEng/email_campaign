@@ -17,6 +17,10 @@ export const storeApi = createApi({
       query: () => `/getAdminData`,
       providesTags: ["Post"],
     }),
+    getInvoicesDetails: builder.query({
+      query: () => `/getInvoicesDetails`,
+      providesTags: ["Post"],
+    }),
     getOnlyWaitingData: builder.query({
       query: () => `/getOnlyWaitingData`,
       providesTags: ["Post"],
@@ -58,7 +62,7 @@ export const storeApi = createApi({
     }),
     uploadReport: builder.mutation({
       query: (data) => ({
-        url: "/uploadReport",
+        url: "/uploadInvoice ",
         method: "POST",
         body: data,
       }),
@@ -91,6 +95,7 @@ export const storeApi = createApi({
 
 export const {
   useGetAllRecordsQuery,
+  useGetInvoicesDetailsQuery,
   useDeleteRecodByIdMutation,
   useSubmitFormMutation,
   useUpdateRecordMutation,

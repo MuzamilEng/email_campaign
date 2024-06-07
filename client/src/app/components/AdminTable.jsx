@@ -1,23 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Checkbox,
-  Button,
-  TablePagination,
-  Tooltip,
-  Modal,
-  Box,
-  Typography,
-  TextField,
+import { Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Checkbox, Button,
+  TablePagination, Tooltip, Modal, Box, Typography, TextField,
 } from "@mui/material";
 import styled from "@mui/material/styles/styled";
-
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useUploadReportMutation } from "../store/storeApi";
 import { Toaster, toast } from "sonner";
@@ -45,14 +31,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function AdminTable({
-  globalAdminData,
-  updateStatus,
-
-  formatDate,
-  removeInitialPath,
-  isUpdating,
-  isDeleting,
+function AdminTable({ globalAdminData, updateStatus,
+  formatDate, removeInitialPath, isUpdating, isDeleting,
 }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -61,8 +41,7 @@ function AdminTable({
   const [csvId, setCsvId] = useState(null);
   const [csvFilename, setFilename] = useState(null);
   const ref = useRef();
-  const [uploadReport, { isLoading, isError, data, isSuccess }] =
-    useUploadReportMutation();
+  const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
   const [mainId, setId] = useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -74,10 +53,9 @@ function AdminTable({
   };
 
   const handleUploadFile = async () => {
-    console.log("Uploading file:", selectedFile);
     const formData = new FormData();
-    formData.append("csvId", mainId);
-    formData.append("reportFile", selectedFile);
+    if(!selectedFile) return toast.error("Please select a file");
+    formData.append("invoiceDetail", selectedFile);
     uploadReport(formData);
     setIsModalOpen(false);
     setSelectedFile(null);
