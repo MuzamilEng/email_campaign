@@ -31,3 +31,25 @@ const useFetch = () => {
 };
 
 export default useFetch;
+
+
+// import { useState, useEffect } from 'react';
+
+//  const useFetch = () => {
+//   const fetchCsvData = async (filePath, callback) => {
+//     try {
+//       const response = await fetch(filePath);
+//       if (!response.ok) throw new Error('Network response was not ok');
+//       const data = await response.text();
+//       const parsedData = data.split('\n').map(row => row.split(',')); // Simple CSV parsing
+//       callback(parsedData);
+//     } catch (error) {
+//       console.error('Error fetching CSV data:', error);
+//     }
+//   };
+
+//   return { fetchCsvData };
+// };
+
+
+// export default useFetch;

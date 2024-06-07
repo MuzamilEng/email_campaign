@@ -21,18 +21,6 @@ export const storeApi = createApi({
       query: () => `/getInvoicesDetails`,
       providesTags: ["Post"],
     }),
-    getOnlyWaitingData: builder.query({
-      query: () => `/getOnlyWaitingData`,
-      providesTags: ["Post"],
-    }),
-    getOnlyApprovedData: builder.query({
-      query: () => `/getOnlyApprovedData`,
-      providesTags: ["Post"],
-    }),
-    getOnlyRejectData: builder.query({
-      query: () => `/getOnlyRejectData`,
-      providesTags: ["Post"],
-    }),
     deleteRecodById: builder.mutation({
       query: (id) => ({
         url: `/deleteRecord/${id}`,
@@ -101,9 +89,6 @@ export const {
   useUpdateRecordMutation,
   useDeleteAdminDataMutation,
   useUpdateAdminStatusMutation,
-  useGetOnlyWaitingDataQuery,
-  useGetOnlyApprovedDataQuery,
-  useGetOnlyRejectDataQuery,
   useUploadReportMutation,
   useSignupMutation,
   useGetLogedinUserQuery,

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../context/GlobalStateProvider";
 
 const ViewCsv = () => {
-  const { csvViewData } = useGlobalContext();
+  const { csvViewData, currentUserInvoiveData } = useGlobalContext();
   const [columns, setColumns] = useState([]);
   const [records, setRecords] = useState([]);
+  // console.log(records, "records");
 
   useEffect(() => {
-    // Extract column names
     if (csvViewData?.length > 0) {
       setColumns(Object.keys(csvViewData[0]));
-      setRecords(csvViewData);
+      setRecords(currentUserInvoiveData);
     }
-  }, [csvViewData]);
+  }, [currentUserInvoiveData]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -24,7 +24,7 @@ const ViewCsv = () => {
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className="px-6 py-4 text-left font-semibold border border-gray-300"
+                  className="px-6 py-4 text-left uppercase font-semibold border border-gray-300"
                 >
                   {column}
                 </th>
@@ -32,7 +32,7 @@ const ViewCsv = () => {
             </tr>
           </thead>
           <tbody>
-            {records.map((record, index) => (
+            {records?.map((record, index) => (
               <tr
                 key={index}
                 className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}

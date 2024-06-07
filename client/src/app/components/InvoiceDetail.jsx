@@ -12,8 +12,6 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useGlobalContext } from "../context/GlobalStateProvider";
-import useFetch from "../../customHooks/useFetch";
-import { useNavigate } from "react-router-dom";
 
 const Container = styled(Box)({
   display: "flex",
@@ -54,65 +52,15 @@ const Header = styled(Box)({
 export function InvoiceDetail() {
   const [open, setOpen] = React.useState(false);
   const [searchMonth, setSearchMonth] = React.useState("");
-  // const { isLoading, isError, data } = useGetAllRecordsQuery();
   const {data: invoicesDetails, isLoading, isError} = useGetInvoicesDetailsQuery();
-  
-
-  const handleView = (fileName) => {
-    window.open(`/csv/${fileName}`, "_blank");
-  };
-  const navigate = useNavigate();
-  const [csvData, setCsvData] = useState([]);
-  const { fetchCsvData } = useFetch();
-  const { csvViewData, setCsvViewData, globalAdminData, setGlobalAdminData } = useGlobalContext();
-  const [viewCsvTable, setViewCsvTable] = useState(false);
-
-  const handleDownload = (filePath) => {
-    fetchCsvData(filePath, (csvData) => {
-      if (csvData.length > 0) {
-        setCsvViewData(csvData);
-        console.log(csvData, "csv data");
-        // navigate("/csv"); // Assuming navigate is obtained from useNavigate hook
-      }
-    });
-  };
-  function removeInitialPath(filePath) {
-    // Split the file path by the directory separator
-    let parts = filePath.split("\\"); // For Windows paths
-
-    // Find the index of the filename in the parts array
-    let filenameIndex = parts.indexOf("Sample-Spreadsheet-10-rows.csv");
-
-    // Get the filename and the remaining parts after the filename
-    let filename = parts[filenameIndex];
-    let remainingParts = parts.slice(filenameIndex);
-
-    // Join the remaining parts to form the new file path
-    let newPath = remainingParts.join("\\"); // For Windows paths
-
-    return newPath;
-  }
+  const { currentUserInvoiveData, setCurrentUserInvoiveData, months, filterByMonth, handleMonthChange } = useGlobalContext();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+  const uniqueMonths = new Set();
 
-  const months = [
-    "January", "February", "March", "April", "May", "June", "July",
-    "August", "September","October","November","December",
-  ];
 
-  const filterByMonth = (invoice) => {
-    if (!searchMonth) return true;
-    const invoiceMonth = new Date(invoice.createdAt).toLocaleString("en-us", {
-      month: "long",
-    });
-    return invoiceMonth.toLowerCase() === searchMonth.toLowerCase();
-  };
-
-  const handleMonthChange = (event) => {
-    setSearchMonth(event.target.value);
-  };
 
   const DrawerList = (
     <DrawerContent role="presentation">
@@ -147,18 +95,22 @@ export function InvoiceDetail() {
         </Typography>
       ) : (
         <List>
-          {/* {data?.data?.filter(filterByMonth)?.map((invoice, index) => ( */}
-            <ListItemStyled >
-              <ListItemText onClick={() => {
-                const newPath = invoicesDetails?.data?.filePath;
-                handleDownload(`/csv/${newPath}`);
-                setOpen(false);
-              }}
-                primary={`File Name: ${invoicesDetails?.data?.fileName ? invoicesDetails?.data?.fileName : "Custom points"}`}
-                secondary={`Time Stamps: ${invoicesDetails?.data?.createdAt}`}
-              />
-            </ListItemStyled>
-          {/* ))} */}
+          {currentUserInvoiveData?.filter(filterByMonth)?.map((invoice, index) => {
+           const monthKey = invoice?.month?.substring(0, 3).toLowerCase();
+            if (uniqueMonths.has(monthKey)) {
+              return null;
+            }
+            uniqueMonths.add(monthKey);
+            return (
+              <ListItemStyled key={index}>
+                <ListItemText onClick={() => {
+                  setOpen(false);
+                }}
+                  primary={`Invoice Month: ${invoice?.month} `}
+                />
+              </ListItemStyled>
+            );
+          })}
         </List>
       )}
     </DrawerContent>
