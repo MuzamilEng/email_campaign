@@ -25,9 +25,7 @@ const Login = () => {
       localStorage.setItem("token", JSON.stringify(res));
       setLoading(false);
       toast.success("Login Successful");
-      setTimeout(() =>
-      navigate('/dashboard')
-    , 2000)
+      setTimeout(() => navigate("/wellcome"), 2000);
     } catch (error) {
       setLoading(false);
       console.log(error.response.data.error);
@@ -73,12 +71,16 @@ const Login = () => {
         </div>
         <div className={styles.right}>
           <h1>New Here ?</h1>
-          <img src="/img/login.jpeg" alt="login" className="w-full max-w-[18vw] rounded-lg" />
+          <img
+            src="/img/login.jpeg"
+            alt="login"
+            className="w-full max-w-[18vw] rounded-lg"
+          />
           <Link to="/signup">
             <div className="mt-[1vw]">
-            <button type="button" className={styles.white_btn}>
-              Sing Up
-            </button>
+              <button type="button" className={styles.white_btn}>
+                Sing Up
+              </button>
             </div>
           </Link>
         </div>
