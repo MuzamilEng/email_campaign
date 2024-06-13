@@ -36,13 +36,7 @@ const Index = () => {
   } = useGetAllRecordsQuery();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const tableHeads = [
-    "Check",
-    "Status",
-    "Created at",
-    "Report Name",
-    "Action",
-  ];
+  const tableHeads = ["Check", "Created at", "Report Name", "Action"];
 
   const formatDate = (dateString) => {
     const options = {
@@ -108,7 +102,12 @@ const Index = () => {
   return (
     <>
       <div className="flex justify-center items-center -mt-[1vw] w-full">
-      {isError && <div className="flex fixed inset-0 text-[1vw] text-gray-800 justify-center items-center w-full h-screen">Error loading data! please try again later</div>}        <TableContainer
+        {isError && (
+          <div className="flex fixed inset-0 text-[1vw] text-gray-800 justify-center items-center w-full h-screen">
+            Error loading data! please try again later
+          </div>
+        )}{" "}
+        <TableContainer
           component={Paper}
           className="w-full max-w-[70vw] shadow rounded mt-[2vw]"
         >
@@ -139,7 +138,7 @@ const Index = () => {
                         ? "Custom Data"
                         : item?.noOfPoints + " points"}
                     </TableCell> */}
-                    <TableCell
+                    {/* <TableCell
                       className={`items-center text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer text-center`}
                     >
                       <p
@@ -153,7 +152,7 @@ const Index = () => {
                       >
                         {item.status}
                       </p>
-                    </TableCell>
+                    </TableCell> */}
                     {/* <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
                       {item?.startDate && item?.endDate
                         ? `${formatDate(item.startDate)} - ${formatDate(

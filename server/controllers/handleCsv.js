@@ -7,10 +7,11 @@ const Invoice = require("../models/invoices");
 exports.UploadCsv = async function (req, res) {
   try {
     const { name, noOfPoints, id } = req.body;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    console.log(id, "myId");
+    // const user = await User.findById(id);
+    // if (!user) {
+    //   return res.status(404).json({ message: "User not found jj" });
+    // }
     const campaignRecord = new CSV({
       fileName: req?.file?.originalname,
       filePath: req?.file?.path,
@@ -63,7 +64,7 @@ exports.getInvoicesDetails = async (req, res, next) => {
     const latestInvoice = await Invoice.findOne().sort({ updatedAt: -1 });
 
     if (!latestInvoice) {
-      return next(new CustomError('No invoices found', 404));
+      return next(new CustomError("No invoices found", 404));
     }
 
     res.status(200).json({

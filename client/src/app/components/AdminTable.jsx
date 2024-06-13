@@ -1,7 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Checkbox, Button,
-  TablePagination, Tooltip, Modal, Box, Typography, TextField,
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Checkbox,
+  Button,
+  TablePagination,
+  Tooltip,
+  Modal,
+  Box,
+  Typography,
+  TextField,
 } from "@mui/material";
 import styled from "@mui/material/styles/styled";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -9,6 +22,7 @@ import { useUploadReportMutation } from "../store/storeApi";
 import { Toaster, toast } from "sonner";
 import { useGlobalContext } from "../context/GlobalStateProvider";
 import DownloadIcon from "@mui/icons-material/Download";
+import { useNavigate } from "react-router-dom";
 
 const ActionButton = styled(Button)(({ theme }) => ({
   transition: "transform 0.3s ease-in-out",
@@ -31,17 +45,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function AdminTable({ globalAdminData, updateStatus,
-  formatDate, removeInitialPath, isUpdating, isDeleting,
+function AdminTable({
+  globalAdminData,
+  updateStatus,
+  formatDate,
+  removeInitialPath,
+  isUpdating,
+  isDeleting,
 }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  // const [selectedFile, setSelectedFile] = useState(null);
   const [csvId, setCsvId] = useState(null);
   const [csvFilename, setFilename] = useState(null);
-  const ref = useRef();
-  const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
+  // const ref = useRef();
+  const navi = useNavigate();
+  const [uploadReport, { isLoading, isError, data, isSuccess }] =
+    useUploadReportMutation();
   const [mainId, setId] = useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -52,29 +73,29 @@ function AdminTable({ globalAdminData, updateStatus,
     setPage(0);
   };
 
-  const handleUploadFile = async () => {
-    const formData = new FormData();
-    if(!selectedFile) return toast.error("Please select a file");
-    formData.append("invoiceDetail", selectedFile);
-    uploadReport(formData);
-    setIsModalOpen(false);
-    setSelectedFile(null);
-  };
+  // const handleUploadFile = async () => {
+  //   const formData = new FormData();
+  //   if (!selectedFile) return toast.error("Please select a file");
+  //   formData.append("invoiceDetail", selectedFile);
+  //   uploadReport(formData);
+  //   setIsModalOpen(false);
+  //   setSelectedFile(null);
+  // };
 
-  const handleFileInputChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-  if (isSuccess) {
-    toast.success("File uploaded successfully", {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
+  // const handleFileInputChange = (event) => {
+  //   setSelectedFile(event.target.files[0]);
+  // };
+  // if (isSuccess) {
+  //   toast.success("File uploaded successfully", {
+  //     position: "top-center",
+  //     autoClose: 2000,
+  //     hideProgressBar: true,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //   });
+  // }
   const handleDownload = (fileName) => {
     if (!fileName) {
       console.error("File name is undefined or empty");
@@ -130,19 +151,17 @@ function AdminTable({ globalAdminData, updateStatus,
                 <StyledTableCell style={{ fontWeight: "bold" }}>
                   Created at
                 </StyledTableCell>
-                <StyledTableCell style={{ fontWeight: "bold" }}>
+                {/* <StyledTableCell style={{ fontWeight: "bold" }}>
                   Status
-                </StyledTableCell>
-                <StyledTableCell
-                  style={{ textAlign: "center", fontWeight: "bold" }}
-                >
+                </StyledTableCell> */}
+                <StyledTableCell style={{ fontWeight: "bold" }}>
                   Files
                 </StyledTableCell>
-                <StyledTableCell
+                {/* <StyledTableCell
                   style={{ textAlign: "center", fontWeight: "bold" }}
                 >
                   Action
-                </StyledTableCell>
+                </StyledTableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -153,11 +172,13 @@ function AdminTable({ globalAdminData, updateStatus,
                     <StyledTableCell>
                       <Checkbox />
                     </StyledTableCell>
-                    <StyledTableCell>{item.name ? item.name : "User"}</StyledTableCell>
+                    <StyledTableCell>
+                      {item.name ? item.name : "User"}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {formatDate(item.createdAt)}
                     </StyledTableCell>
-                    <StyledTableCell>{item.status}</StyledTableCell>
+                    {/* <StyledTableCell>{item.status}</StyledTableCell> */}
                     <StyledTableCell>
                       <Tooltip title="download" arrow>
                         <Box
@@ -179,7 +200,7 @@ function AdminTable({ globalAdminData, updateStatus,
                         </Box>
                       </Tooltip>
                     </StyledTableCell>
-                    <StyledTableCell>
+                    {/* <StyledTableCell>
                       <div className="flex gap-4 justify-center">
                         <Tooltip title="Reject this item" arrow>
                           <ActionButton
@@ -207,7 +228,8 @@ function AdminTable({ globalAdminData, updateStatus,
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                              setIsModalOpen(true);
+                              // setIsModalOpen(true);
+                              navi("/fileupload");
                               setId(item?._id);
                               // console.log(mainId, "mmmm");
                             }}
@@ -216,7 +238,7 @@ function AdminTable({ globalAdminData, updateStatus,
                           </ActionButton>
                         </Tooltip>
                       </div>
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                   </StyledTableRow>
                 ))}
             </TableBody>
@@ -232,8 +254,8 @@ function AdminTable({ globalAdminData, updateStatus,
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Box
+      {/* <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}> */}
+      {/* <Box
           sx={{
             position: "absolute",
             width: 400,
@@ -280,8 +302,8 @@ function AdminTable({ globalAdminData, updateStatus,
           >
             Selected file:
             {/* Show selected file name */}
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+      {/* </Typography> */}
+      {/* <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Tooltip title="Cancel">
               <Button
                 onClick={() => setIsModalOpen(false)}
@@ -303,9 +325,9 @@ function AdminTable({ globalAdminData, updateStatus,
                 {isLoading ? "Uploading..." : "Upload"}
               </Button>
             </Tooltip>
-          </Box>
-        </Box>
-      </Modal>
+          </Box> */}
+      {/* </Box> */}
+      {/* </Modal> */}
     </>
   );
 }

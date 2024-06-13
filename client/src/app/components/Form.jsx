@@ -72,6 +72,7 @@ const Form = () => {
         formData.append(key, campaignDetails[key]);
         console.log(key, campaignDetails[key]);
       }
+      // formData.append("idd", userId);
       if (recordFile) {
         formData.append("dataFile", recordFile);
       }
@@ -82,7 +83,8 @@ const Form = () => {
       localStorage.setItem("csvData", JSON.stringify(response?.data));
       toast.success("File uploaded successfully");
       setOpen(false);
-      setCampaignDetails({})
+      setCampaignDetails({});
+
       refetch();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -106,7 +108,7 @@ const Form = () => {
       }
     }
   }, [showPointFields, campaignDetails.noOfPoints]);
-
+  // console.log(userId, "uuuu");
   return (
     <main className="flex w-full justify-center p-[1vw] items-center">
       <Toaster position="top-center" />
