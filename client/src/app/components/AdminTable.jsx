@@ -173,7 +173,7 @@ function AdminTable({
                       <Checkbox />
                     </StyledTableCell>
                     <StyledTableCell>
-                      {item.name ? item.name : "User"}
+                      {item.firstName ? item.firstName : "User"}
                     </StyledTableCell>
                     <StyledTableCell>
                       {formatDate(item.createdAt)}

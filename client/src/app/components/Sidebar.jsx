@@ -34,7 +34,7 @@ const Sidebar = () => {
             color="primary"
             onClick={() => navi("/fileuploadbyadmin")}
           >
-            Upload report
+            Upload Invoice
           </ActionButton>
         </Tooltip>
       </main>

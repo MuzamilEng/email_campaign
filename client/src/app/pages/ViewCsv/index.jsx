@@ -78,7 +78,7 @@ const ViewCsv = () => {
                     direction={orderBy === column ? order : "asc"}
                     onClick={() => handleSortRequest(column)}
                   >
-                    {column}
+                    <p className="uppercase">{column}</p>
                   </TableSortLabel>
                 </TableCell>
               ))}
