@@ -7,7 +7,7 @@ const Invoice = require("../models/invoices");
 exports.UploadCsv = async function (req, res) {
   try {
     const { name, noOfPoints, id } = req.body;
-    console.log(id, "myId");
+    // console.log(id, "myId");
     // const user = await User.findById(id);
     // if (!user) {
     //   return res.status(404).json({ message: "User not found jj" });
@@ -77,39 +77,60 @@ exports.getInvoicesDetails = async (req, res, next) => {
   }
 };
 /* ------------------ EXPORTING FUNCTION To open file viewer page ------------------ */
+
 module.exports.view = async function (req, res) {
   try {
-    // console.log(req.params);
     let csvFile = await CSV.findOne({ file: req.params.id });
-    // console.log(csvFile);
     const results = [];
     const header = [];
-    fs.createReadStream(csvFile.filePath) //seeting up the path for file upload
+
+    fs.createReadStream(csvFile.filePath)
       .pipe(csvParser())
       .on("headers", (headers) => {
-        headers.map((head) => {
+        headers.forEach((head) => {
           header.push(head);
         });
-        // console.log(header);
       })
       .on("data", (data) => results.push(data))
       .on("end", () => {
-        // console.log(results.length);
-        // console.log(results);
-        res.render("file_viewer", {
-          title: "File Viewer",
-          fileName: csvFile.fileName,
-          head: header,
-          data: results,
-          length: results.length,
+        // Set the correct content-type and content-disposition headers
+        res.setHeader("Content-Type", "text/csv");
+        res.setHeader("Content-Disposition", `attachment; filename="${csvFile.fileName}"`);
+
+        // Format the CSV data and send it as the response
+        let csvData = header.join(",") + "\n";
+        results.forEach((row) => {
+          const formattedRow = header
+            .map((field) => {
+              let value = row[field];
+
+              // Escape double quotes by doubling them
+              if (typeof value === "string" && value.includes('"')) {
+                value = value.replace(/"/g, '""');
+              }
+
+              // Enclose the field in double quotes if it contains commas, newlines, or double quotes
+              if (
+                typeof value === "string" &&
+                (value.includes(",") || value.includes("\n") || value.includes('"'))
+              ) {
+                value = `"${value}"`;
+              }
+
+              return value;
+            })
+            .join(",");
+
+          csvData += formattedRow + "\n";
         });
+
+        res.status(200).send(csvData);
       });
   } catch (error) {
-    console.log("Error in fileController/view", error);
+    console.error("Error in fileController/view", error);
     res.status(500).send("Internal server error");
   }
 };
-
 /* ------------------ EXPORTING FUNCTION To delete the file ------------------ */
 module.exports.deleteAdminData = async function (req, res) {
   try {
@@ -197,17 +218,11 @@ module.exports.delete = async function (req, res) {
 exports.updateAdminData = async (req, res, next) => {
   try {
     const { name, date, time } = req.body;
-    const csv = await CSV.findByIdAndUpdate(
-      req.params.id,
-      { name, date, time },
-      { new: true }
-    );
+    const csv = await CSV.findByIdAndUpdate(req.params.id, { name, date, time }, { new: true });
 
     // Check if CSV document exists
     if (!csv) {
-      return res
-        .status(404)
-        .json({ success: false, message: "CSV data not found" });
+      return res.status(404).json({ success: false, message: "CSV data not found" });
     }
 
     // Send success response with updated CSV data

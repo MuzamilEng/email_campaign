@@ -17,12 +17,7 @@ import AdminTable from "../../components/AdminTable";
 const Index = () => {
   const [idToDelete, setIdToDelete] = useState(null);
   const apiUrl = "http://localhost:5173" || import.meta.env.VITE_REACT_API_URL;
-  const {
-    isError,
-    isLoading,
-    data,
-    refetch: refetchStatus,
-  } = useGetAllRecordsQuery();
+  const { isError, isLoading, data, refetch: refetchStatus } = useGetAllRecordsQuery();
   const [deleteAdminData, { isLoading: isDeleting, isError: deleteError }] =
     useDeleteAdminDataMutation();
   const formatDate = (dateString) => {
@@ -45,11 +40,7 @@ const Index = () => {
   };
   const [
     updateAdmin,
-    {
-      isLoading: isUpdating,
-      isSuccess: isUpdateSuccess,
-      isError: isUpdateError,
-    },
+    { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError },
   ] = useUpdateAdminStatusMutation();
   const updateStatus = async (id, status) => {
     try {
@@ -66,8 +57,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [csvData, setCsvData] = useState([]);
   const { fetchCsvData } = useFetch();
-  let { csvViewData, setCsvViewData, globalAdminData, setGlobalAdminData } =
-    useGlobalContext();
+  let { csvViewData, setCsvViewData, globalAdminData, setGlobalAdminData } = useGlobalContext();
   const [viewCsvTable, setViewCsvTable] = useState(false);
 
   if (isUpdateError) {
@@ -104,9 +94,7 @@ const Index = () => {
     <>
       <AdminLayout>
         <div className="container mx-auto p-4">
-          <h1 className="text-[2vw] w-full mt-[3vw] text-center font-bold mb-4">
-            Admin Dashboard
-          </h1>
+          <h1 className="text-[2vw] w-full mt-[3vw] text-center font-bold mb-4">Admin Dashboard</h1>
           <Toaster />
           {isError && <div>Error loading data</div>}
           {isLoading ? (

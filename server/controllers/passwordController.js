@@ -30,18 +30,12 @@ const forgotPassword = async (req, res) => {
         { otp: otp },
         { upsert: true }
       );
-      console.log(token, "mytoken");
+      // console.log(token, "mytoken");
 
       if (!user) {
-        return res
-          .status(404)
-          .json({ error: "Please enter valid credentials" });
+        return res.status(404).json({ error: "Please enter valid credentials" });
       }
-      await sendMail(
-        email,
-        "Password Reset OTP",
-        `Your OTP for password reset is: ${otp}`
-      );
+      await sendMail(email, "Password Reset OTP", `Your OTP for password reset is: ${otp}`);
     }
     if (phoneNumber) {
       const user = await User.findOne({ phoneNumber });
@@ -52,9 +46,7 @@ const forgotPassword = async (req, res) => {
       );
       console.log(token, "mytoken");
       if (!user) {
-        return res
-          .status(404)
-          .json({ error: "Please enter valid credentials" });
+        return res.status(404).json({ error: "Please enter valid credentials" });
       }
       const accountSid = process.env.ACCOUNTSID;
       const authToken = process.env.AUTHTOKEN;
@@ -66,13 +58,11 @@ const forgotPassword = async (req, res) => {
         to: phoneNumber,
       });
     }
-    res
-      .status(200)
-      .json({ message: "OTP sent to your email for password reset" });
+    res.status(200).json({ message: "OTP sent to your email for password reset" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const resetPassword = async (req, res) => {
   try {

@@ -61,8 +61,7 @@ function AdminTable({
   const [csvFilename, setFilename] = useState(null);
   // const ref = useRef();
   const navi = useNavigate();
-  const [uploadReport, { isLoading, isError, data, isSuccess }] =
-    useUploadReportMutation();
+  const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
   const [mainId, setId] = useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -102,23 +101,25 @@ function AdminTable({
       return;
     }
 
-    const fileUrl = `http://localhost:5173/public/csv/${fileName}`;
+    const fileUrl = `http://localhost:5173/csv/${fileName}`;
     console.log(`Downloading file from URL: ${fileUrl}`);
 
-    fetch(fileUrl)
+    fetch(fileUrl, {
+      headers: {
+        "Content-Disposition": `attachment; filename="${fileName.split("/").pop()}"`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${response.statusText}`
-          );
+          throw new Error(`Network response was not ok: ${response.statusText}`);
         }
         return response.blob();
       })
       .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", fileName.split("/").pop()); // Ensure fileName is not undefined here
+        link.setAttribute("download", fileName.split("/").pop());
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
@@ -142,21 +143,13 @@ function AdminTable({
           <Table className="w-full">
             <TableHead className="bg-gray-200">
               <TableRow>
-                <StyledTableCell style={{ fontWeight: "bold" }}>
-                  Check
-                </StyledTableCell>
-                <StyledTableCell style={{ fontWeight: "bold" }}>
-                  Name
-                </StyledTableCell>
-                <StyledTableCell style={{ fontWeight: "bold" }}>
-                  Created at
-                </StyledTableCell>
+                <StyledTableCell style={{ fontWeight: "bold" }}>Check</StyledTableCell>
+                <StyledTableCell style={{ fontWeight: "bold" }}>Name</StyledTableCell>
+                <StyledTableCell style={{ fontWeight: "bold" }}>Created at</StyledTableCell>
                 {/* <StyledTableCell style={{ fontWeight: "bold" }}>
                   Status
                 </StyledTableCell> */}
-                <StyledTableCell style={{ fontWeight: "bold" }}>
-                  Files
-                </StyledTableCell>
+                <StyledTableCell style={{ fontWeight: "bold" }}>Files</StyledTableCell>
                 {/* <StyledTableCell
                   style={{ textAlign: "center", fontWeight: "bold" }}
                 >
@@ -172,12 +165,8 @@ function AdminTable({
                     <StyledTableCell>
                       <Checkbox />
                     </StyledTableCell>
-                    <StyledTableCell>
-                      {item.firstName ? item.firstName : "User"}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {formatDate(item.createdAt)}
-                    </StyledTableCell>
+                    <StyledTableCell>{item.firstName ? item.firstName : "User"}</StyledTableCell>
+                    <StyledTableCell>{formatDate(item.createdAt)}</StyledTableCell>
                     {/* <StyledTableCell>{item.status}</StyledTableCell> */}
                     <StyledTableCell>
                       <Tooltip title="download" arrow>
@@ -200,45 +189,6 @@ function AdminTable({
                         </Box>
                       </Tooltip>
                     </StyledTableCell>
-                    {/* <StyledTableCell>
-                      <div className="flex gap-4 justify-center">
-                        <Tooltip title="Reject this item" arrow>
-                          <ActionButton
-                            variant="contained"
-                            color="error"
-                            onClick={() => updateStatus(item._id, "Reject")}
-                            disabled={isDeleting}
-                          >
-                            {isUpdating ? "reject..." : "Reject"}
-                          </ActionButton>
-                        </Tooltip>
-                        <Tooltip title="Approve this item" arrow>
-                          <ActionButton
-                            variant="contained"
-                            color="success"
-                            onClick={() => updateStatus(item._id, "Approved")}
-                            disabled={isDeleting}
-                          >
-                            {isDeleting ? "approved..." : "Approved"}
-                          </ActionButton>
-                        </Tooltip>
-
-                        <Tooltip title="Upload report" arrow>
-                          <ActionButton
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                              // setIsModalOpen(true);
-                              navi("/fileupload");
-                              setId(item?._id);
-                              // console.log(mainId, "mmmm");
-                            }}
-                          >
-                            Upload report
-                          </ActionButton>
-                        </Tooltip>
-                      </div>
-                    </StyledTableCell> */}
                   </StyledTableRow>
                 ))}
             </TableBody>
@@ -254,80 +204,6 @@ function AdminTable({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {/* <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}> */}
-      {/* <Box
-          sx={{
-            position: "absolute",
-            width: 400,
-            bgcolor: "background.paper", // Use theme-based background color
-            boxShadow: 24,
-            p: 4,
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            borderRadius: 4,
-          }}
-        >
-          <input
-            type="file"
-            ref={ref}
-            onChange={handleFileInputChange}
-            hidden
-          />
-          <label htmlFor="file-upload">
-            <Button
-              component="span"
-              color="primary"
-              variant="outlined"
-              startIcon={<CloudUploadIcon />}
-              onClick={() => ref.current.click()}
-              fullWidth
-              sx={{
-                mb: 2, // Add margin bottom for spacing
-                borderStyle: "dashed", // Set border style to dashed
-                borderColor: "primary.main", // Set border color to primary color
-                borderWidth: 2, // Set border width
-                borderRadius: 4, // Optional: Set border radius
-                padding: "7vw", // Adjust padding as needed
-              }}
-            >
-              Choose File
-            </Button>
-          </label>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            gutterBottom
-            sx={{ fontWeight: "bold" }}
-          >
-            Selected file:
-            {/* Show selected file name */}
-      {/* </Typography> */}
-      {/* <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-            <Tooltip title="Cancel">
-              <Button
-                onClick={() => setIsModalOpen(false)}
-                color="secondary"
-                variant="outlined"
-                sx={{ mr: 1 }}
-              >
-                Cancel
-              </Button>
-            </Tooltip>
-            <Tooltip title="Upload">
-              <Button
-                onClick={handleUploadFile}
-                color="primary"
-                variant="contained"
-                disabled={isLoading}
-                startIcon={<CloudUploadIcon />}
-              >
-                {isLoading ? "Uploading..." : "Upload"}
-              </Button>
-            </Tooltip>
-          </Box> */}
-      {/* </Box> */}
-      {/* </Modal> */}
     </>
   );
 }

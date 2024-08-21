@@ -8,11 +8,7 @@ import { useGetInvoicesDetailsQuery } from "../store/storeApi";
 const GlobalStateContext = createContext();
 
 export const GlobalStateProvider = ({ children }) => {
-  const {
-    data: invoicesDetails,
-    isLoading,
-    isError,
-  } = useGetInvoicesDetailsQuery();
+  const { data: invoicesDetails, isLoading, isError } = useGetInvoicesDetailsQuery();
   const [menuBar, setMenuBar] = useState(false);
   const [hamburger, setHamburger] = useState(true);
   const [userLoginInfo, setUserLoginInfoState] = useState(null);
@@ -80,8 +76,7 @@ export const GlobalStateProvider = ({ children }) => {
   const filterByMonth = (invoice) => {
     if (!searchMonth) return true;
     return (
-      invoice?.month?.substring(0, 3).toLowerCase() ===
-      searchMonth.substring(0, 3).toLowerCase()
+      invoice?.month?.substring(0, 3).toLowerCase() === searchMonth.substring(0, 3).toLowerCase()
     );
   };
 
@@ -106,9 +101,7 @@ export const GlobalStateProvider = ({ children }) => {
 
   useEffect(() => {
     if (csvViewData) {
-      const filteredData = csvViewData?.filter(
-        (item) => item?.pan == userPenCardNumber
-      );
+      const filteredData = csvViewData?.filter((item) => item?.pan == userPenCardNumber);
       console.log(filteredData, "filteredData");
       setCurrentUserInvoiveData(filteredData);
       setMonthlyInvoice(filteredData);
