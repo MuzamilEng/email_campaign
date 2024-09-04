@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import AdminTable from "../../components/AdminTable";
 const Index = () => {
   const [idToDelete, setIdToDelete] = useState(null);
-  const apiUrl = "http://localhost:5173" || import.meta.env.VITE_REACT_API_URL;
+  const apiUrl = "http://api.apps.wahix.com/api/v1" || import.meta.env.VITE_REACT_API_URL;
   const { isError, isLoading, data, refetch: refetchStatus } = useGetAllRecordsQuery();
   const [deleteAdminData, { isLoading: isDeleting, isError: deleteError }] =
     useDeleteAdminDataMutation();

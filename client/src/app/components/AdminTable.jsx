@@ -101,7 +101,7 @@ function AdminTable({
       return;
     }
 
-    const fileUrl = `http://localhost:5173/csv/${fileName}`;
+    const fileUrl = `http://apps.wahix.com/api/v1/csv/${fileName}`;
     console.log(`Downloading file from URL: ${fileUrl}`);
 
     fetch(fileUrl, {
