@@ -48,7 +48,6 @@ const start = async () => {
   }
 };
 
-<<<<<<< HEAD
 const WORDPRESS_API_URL = "http://woocommerece-store.local/wp-json";
 const WOOCOMMERCE_CONSUMER_KEY = "ck_8bfa874fbf2c1550274aabdaa8535af245d4c858";
 const WOOCOMMERCE_CONSUMER_SECRET = "cs_24e678f3691aa3ab4b750ba214cfc9c2c80fe9fe";
@@ -87,8 +86,6 @@ const fetchData = async (endpoint, config = {}) => {
 // fetchData('wc/v3/products')
 //   .then(data => console.log('Products:', data))
 //   .catch(error => console.error('Error:', error));
-=======
->>>>>>> 4b042e9df0c20ffd60a600152d5b11644a7a9fd5
 
 // Example usage:
 

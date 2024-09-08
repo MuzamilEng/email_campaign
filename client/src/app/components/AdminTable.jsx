@@ -96,39 +96,39 @@ function AdminTable({
   //     progress: undefined,
   //   });
   // }
-  const handleDownload = (fileName) => {
-    if (!fileName) {
-      console.error("File name is undefined or empty");
-      return;
-    }
+  // const handleDownload = (fileName) => {
+  //   if (!fileName) {
+  //     console.error("File name is undefined or empty");
+  //     return;
+  //   }
 
-    const fileUrl = `http://apps.wahix.com/api/v1/csv/${fileName}`;
-    console.log(`Downloading file from URL: ${fileUrl}`);
+  //   const fileUrl = `http://apps.wahix.com/api/v1/csv/${fileName}`;
+  //   console.log(`Downloading file from URL: ${fileUrl}`);
 
-    fetch(fileUrl, {
-      headers: {
-        "Content-Disposition": `attachment; filename="${fileName.split("/").pop()}"`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.blob();
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName.split("/").pop());
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
-      })
-      .catch((error) => {
-        console.error("Error downloading file:", error);
-      });
-  };
+  //   fetch(fileUrl, {
+  //     headers: {
+  //       "Content-Disposition": `attachment; filename="${fileName.split("/").pop()}"`,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error(`Network response was not ok: ${response.statusText}`);
+  //       }
+  //       return response.blob();
+  //     })
+  //     .then((blob) => {
+  //       const url = window.URL.createObjectURL(blob);
+  //       const link = document.createElement("a");
+  //       link.href = url;
+  //       link.setAttribute("download", fileName.split("/").pop());
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       link.parentNode.removeChild(link);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error downloading file:", error);
+  //     });
+  // };
 
   useEffect(() => {
     let id = JSON.parse(localStorage.getItem("csvData"));
@@ -136,7 +136,7 @@ function AdminTable({
 
     setFilename(id?.campaignRecord?.file);
   }, [csvId]);
-  // console.log(csvFilename, "file name");
+  console.log(csvFilename, "file name");
   return (
     <>
       <Toaster />
