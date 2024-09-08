@@ -51,6 +51,7 @@ function AdminTable({
   formatDate,
   removeInitialPath,
   isUpdating,
+  handleDownload,
   isDeleting,
 }) {
   const [page, setPage] = useState(0);
@@ -71,70 +72,13 @@ function AdminTable({
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  // const handleUploadFile = async () => {
-  //   const formData = new FormData();
-  //   if (!selectedFile) return toast.error("Please select a file");
-  //   formData.append("invoiceDetail", selectedFile);
-  //   uploadReport(formData);
-  //   setIsModalOpen(false);
-  //   setSelectedFile(null);
-  // };
-
-  // const handleFileInputChange = (event) => {
-  //   setSelectedFile(event.target.files[0]);
-  // };
-  // if (isSuccess) {
-  //   toast.success("File uploaded successfully", {
-  //     position: "top-center",
-  //     autoClose: 2000,
-  //     hideProgressBar: true,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //   });
-  // }
-  const handleDownload = (fileName) => {
-    if (!fileName) {
-      console.error("File name is undefined or empty");
-      return;
-    }
-
-    const fileUrl = `http://localhost:5173/csv/${fileName}`;
-    console.log(`Downloading file from URL: ${fileUrl}`);
-
-    fetch(fileUrl, {
-      headers: {
-        "Content-Disposition": `attachment; filename="${fileName.split("/").pop()}"`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.blob();
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName.split("/").pop());
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
-      })
-      .catch((error) => {
-        console.error("Error downloading file:", error);
-      });
-  };
-
   useEffect(() => {
     let id = JSON.parse(localStorage.getItem("csvData"));
     setCsvId(id?.campaignRecord?._id);
-    setFilename(id?.fileName);
-  }, [csvId, setCsvId, setFilename, csvFilename]);
 
+    setFilename(id?.campaignRecord?.file);
+  }, [csvId]);
+  // console.log(csvFilename, "file name");
   return (
     <>
       <Toaster />

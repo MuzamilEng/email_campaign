@@ -4,42 +4,6 @@ const fs = require("fs");
 const csvParser = require("csv-parser");
 const User = require("../models/User");
 const Invoice = require("../models/invoices");
-exports.UploadCsv = async function (req, res) {
-  try {
-    const { name, noOfPoints, id } = req.body;
-    // console.log(id, "myId");
-    // const user = await User.findById(id);
-    // if (!user) {
-    //   return res.status(404).json({ message: "User not found jj" });
-    // }
-    const campaignRecord = new CSV({
-      fileName: req?.file?.originalname,
-      filePath: req?.file?.path,
-      file: req?.file?.filename,
-      name,
-      noOfPoints,
-      status: "Waiting",
-    });
-
-    // Save the record to the database
-    await campaignRecord.save();
-    // const formattedTimestamp = dayjs().format("MMMM D, YYYY");
-    // user.totalInvoices.push({
-    //   fileName: req?.file?.originalname,
-    //   timeStamps: formattedTimestamp,
-    // });
-
-    // // Respond with the saved record and filename
-    // await user.save();
-    res.status(200).json({
-      campaignRecord,
-      fileName: req?.file?.originalname, // Include the filename in the response
-    });
-  } catch (error) {
-    // console.error("Error in fileController/upload:", error);
-    res.status(500).send("Internal server error");
-  }
-};
 
 exports.Invoice = async function (req, res) {
   try {
@@ -81,53 +45,67 @@ exports.getInvoicesDetails = async (req, res, next) => {
 module.exports.view = async function (req, res) {
   try {
     let csvFile = await CSV.findOne({ file: req.params.id });
+    if (!csvFile) {
+      return res.status(404).send("CSV file not found");
+    }
+
     const results = [];
-    const header = [];
+    const headers = [];
 
     fs.createReadStream(csvFile.filePath)
       .pipe(csvParser())
       .on("headers", (headers) => {
         headers.forEach((head) => {
-          header.push(head);
+          headers.push(head);
         });
       })
       .on("data", (data) => results.push(data))
       .on("end", () => {
-        // Set the correct content-type and content-disposition headers
+        const fields = headers;
+        const opts = { fields };
+        const parser = new Parser(opts);
+        const csv = parser.parse(results);
+
         res.setHeader("Content-Type", "text/csv");
         res.setHeader("Content-Disposition", `attachment; filename="${csvFile.fileName}"`);
-
-        // Format the CSV data and send it as the response
-        let csvData = header.join(",") + "\n";
-        results.forEach((row) => {
-          const formattedRow = header
-            .map((field) => {
-              let value = row[field];
-
-              // Escape double quotes by doubling them
-              if (typeof value === "string" && value.includes('"')) {
-                value = value.replace(/"/g, '""');
-              }
-
-              // Enclose the field in double quotes if it contains commas, newlines, or double quotes
-              if (
-                typeof value === "string" &&
-                (value.includes(",") || value.includes("\n") || value.includes('"'))
-              ) {
-                value = `"${value}"`;
-              }
-
-              return value;
-            })
-            .join(",");
-
-          csvData += formattedRow + "\n";
-        });
-
-        res.status(200).send(csvData);
+        res.status(200).send(csv);
+      })
+      .on("error", (error) => {
+        console.error("Error parsing CSV:", error);
+        res.status(500).send("Error parsing CSV file");
       });
   } catch (error) {
     console.error("Error in fileController/view", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+exports.UploadCsv = async function (req, res) {
+  try {
+    const { name, noOfPoints } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const campaignRecord = new CSV({
+      fileName: req.file.originalname,
+      filePath: req.file.path,
+      file: req.file.filename,
+      name,
+      noOfPoints,
+      status: "Waiting",
+    });
+
+    // Save the record to the database
+    await campaignRecord.save();
+
+    res.status(200).json({
+      campaignRecord,
+      fileName: req.file.originalname,
+    });
+  } catch (error) {
+    console.error("Error in fileController/upload:", error);
     res.status(500).send("Internal server error");
   }
 };

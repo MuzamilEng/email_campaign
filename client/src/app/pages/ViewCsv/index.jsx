@@ -20,7 +20,7 @@ const ViewCsv = () => {
   const [orderBy, setOrderBy] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  console.log(currentUserInvoiveData, "hhhhh");
+  // console.log(currentUserInvoiveData, "hhhhh");
   useEffect(() => {
     if (csvViewData?.length > 0) {
       setColumns(Object.keys(csvViewData[0]));
@@ -60,19 +60,14 @@ const ViewCsv = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       {csvViewData?.length > 0 && (
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
-          Invoice Details
-        </h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">Invoice Details</h1>
       )}
       <TableContainer component={Paper}>
         <Table aria-label="csv table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell
-                  key={column}
-                  sortDirection={orderBy === column ? order : false}
-                >
+                <TableCell key={column} sortDirection={orderBy === column ? order : false}>
                   <TableSortLabel
                     active={orderBy === column}
                     direction={orderBy === column ? order : "asc"}
@@ -88,10 +83,7 @@ const ViewCsv = () => {
             {sortedRecords
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((record, index) => (
-                <TableRow
-                  key={index}
-                  className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-                >
+                <TableRow key={index} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
                   {columns.map((column) => (
                     <TableCell key={column}>{record[column]}</TableCell>
                   ))}

@@ -17,18 +17,10 @@ const generateOTP = () => {
 const signUp = async (req, res) => {
   try {
     // Extract user data from request body
-    const { firstName, lastName, password, email, phoneNumber, penCardNumber } =
-      req.body;
+    const { firstName, lastName, password, email, phoneNumber, penCardNumber } = req.body;
     // console.log(phoneNumber, "phone number");
     // Check for missing fields
-    if (
-      !firstName ||
-      !lastName ||
-      !password ||
-      !email ||
-      !phoneNumber ||
-      !penCardNumber
-    ) {
+    if (!firstName || !lastName || !password || !email || !phoneNumber || !penCardNumber) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -104,15 +96,16 @@ const signUp = async (req, res) => {
     return res.status(200).send({
       // message: "An email has been sent to your account for verification.",
       user: {
-        firstName: savedUser.firstName,
-        lastName: savedUser.lastName,
-        email: savedUser.email,
-        phoneNumber: savedUser.phoneNumber,
+        firstName: savedUser?.firstName,
+        lastName: savedUser?.lastName,
+        email: savedUser?.email,
+        phoneNumber: savedUser?.phoneNumber,
         // ... (include other non-sensitive fields)
       },
     });
   } catch (error) {
     console.error("Error during signup:", error);
+    console.log(req.body, "body");
     return res.status(500).json({ error: "Internal server error" }); // Avoid leaking specific error messages
   }
 };
@@ -120,39 +113,35 @@ const signUp = async (req, res) => {
 module.exports = signUp;
 
 const login = (req, res, next) => {
-  passport.authenticate(
-    "local",
-    { session: false },
-    async (err, user, info) => {
-      if (err) {
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
-      console.log(user, "user");
-
-      if (!user) {
-        return res.status(401).json({ error: info?.message });
-      }
-      // if (user?.verified == false) {
-      //   return res.status(401).json({ error: "Please verify your email" });
-      // }
-
-      try {
-        // Generate and sign a JWT token
-        const token = jwt.sign(
-          { id: user._id, email: user.email },
-          "JSONWEBTOKKENSECRETKEY!@#$%^&*()",
-          {
-            expiresIn: "12d",
-          }
-        );
-
-        return res.json({ token, user });
-      } catch (error) {
-        console.error("Error retrieving profile:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
+  passport.authenticate("local", { session: false }, async (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-  )(req, res, next);
+    console.log(user, "user");
+
+    if (!user) {
+      return res.status(401).json({ error: info?.message });
+    }
+    // if (user?.verified == false) {
+    //   return res.status(401).json({ error: "Please verify your email" });
+    // }
+
+    try {
+      // Generate and sign a JWT token
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        "JSONWEBTOKKENSECRETKEY!@#$%^&*()",
+        {
+          expiresIn: "12d",
+        }
+      );
+
+      return res.json({ token, user });
+    } catch (error) {
+      console.error("Error retrieving profile:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  })(req, res, next);
 };
 
 const getUserDetails = (req, res) => {

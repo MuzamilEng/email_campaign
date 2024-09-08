@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
 import Papa from "papaparse";
 
+// Custom Hook to fetch and parse CSV data
 const useFetch = () => {
+  // Function to sanitize column names
   const sanitizeColumns = (data) => {
     return data.map((item) => {
       const sanitizedItem = {};
@@ -13,43 +14,29 @@ const useFetch = () => {
     });
   };
 
+  // Function to fetch and parse CSV data
   const fetchCsvData = async (filePath, callback) => {
-    const response = await fetch(filePath);
-    const reader = response.body.getReader();
-    const result = await reader.read();
-    const decoder = new TextDecoder("utf-8");
-    const csvString = decoder.decode(result.value);
-    const { data } = Papa.parse(csvString, {
-      header: true,
-      dynamicTyping: true,
-    });
-    const sanitizedData = sanitizeColumns(data);
-    callback(sanitizedData);
+    try {
+      const response = await fetch(`http://localhost:5173/csv/${filePath}`);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const csvString = await response.text(); // Fetch CSV content as text
+      const { data } = Papa.parse(csvString, {
+        header: true,
+        dynamicTyping: true,
+      });
+
+      const sanitizedData = sanitizeColumns(data);
+      callback(sanitizedData); // Pass sanitized data to callback
+    } catch (error) {
+      console.error("Error fetching or parsing CSV data:", error);
+    }
   };
 
   return { fetchCsvData };
 };
 
 export default useFetch;
-
-
-// import { useState, useEffect } from 'react';
-
-//  const useFetch = () => {
-//   const fetchCsvData = async (filePath, callback) => {
-//     try {
-//       const response = await fetch(filePath);
-//       if (!response.ok) throw new Error('Network response was not ok');
-//       const data = await response.text();
-//       const parsedData = data.split('\n').map(row => row.split(',')); // Simple CSV parsing
-//       callback(parsedData);
-//     } catch (error) {
-//       console.error('Error fetching CSV data:', error);
-//     }
-//   };
-
-//   return { fetchCsvData };
-// };
-
-
-// export default useFetch;

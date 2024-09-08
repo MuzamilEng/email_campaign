@@ -9,6 +9,7 @@ const GlobalStateContext = createContext();
 
 export const GlobalStateProvider = ({ children }) => {
   const { data: invoicesDetails, isLoading, isError } = useGetInvoicesDetailsQuery();
+  console.log(invoicesDetails, "invoicesDetails");
   const [menuBar, setMenuBar] = useState(false);
   const [hamburger, setHamburger] = useState(true);
   const [userLoginInfo, setUserLoginInfoState] = useState(null);
@@ -43,14 +44,14 @@ export const GlobalStateProvider = ({ children }) => {
   };
 
   const handleView = (fileName) => {
-    const filePath = `/csv/${fileName}`;
+    const filePath = fileName;
     handleDownload(filePath);
   };
   function removeInitialPath(filePath) {
     // Extract the filename from the full file path
-    const parts = filePath.split(/[/\\]/); // Split by both forward slash and backslash
-    const filename = parts.pop(); // Get the last part, which should be the filename
-
+    // const parts = filePath.split(/[/\\]/); // Split by both forward slash and backslash
+    // const filename = parts.pop(); // Get the last part, which should be the filename
+    let filename = filePath;
     return filename;
   }
   console.log(csvViewData, "myData");
@@ -88,21 +89,21 @@ export const GlobalStateProvider = ({ children }) => {
         invoice?.month?.substring(0, 3).toLowerCase() ===
         selectedMonth.substring(0, 3).toLowerCase()
     );
-    console.log(getInvoiceByMonth, "getInvoiceByMonth");
+    // console.log(getInvoiceByMonth, "getInvoiceByMonth");
     setCurrentUserInvoiveData(getInvoiceByMonth);
   };
 
   useEffect(() => {
     if (invoicesDetails?.data) {
-      const newPath = removeInitialPath(invoicesDetails?.data?.filePath);
-      handleDownload(`/csv/${newPath}`);
+      const newPath = removeInitialPath(invoicesDetails?.data?.file);
+      handleDownload(newPath);
     }
   }, [invoicesDetails?.data?.filePath]);
 
   useEffect(() => {
     if (csvViewData) {
       const filteredData = csvViewData?.filter((item) => item?.pan == userPenCardNumber);
-      console.log(filteredData, "filteredData");
+      // console.log(filteredData, "filteredData");
       setCurrentUserInvoiveData(filteredData);
       setMonthlyInvoice(filteredData);
     }
