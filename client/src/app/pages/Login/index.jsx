@@ -24,9 +24,7 @@ const Login = () => {
       const { data: res } = await axios.post(url, data);
 
       localStorage.setItem("token", JSON.stringify(res));
-      if (adminEmail === "admin@gmail.com") {
-        navigate("/adminTable");
-      }
+
       setLoading(false);
       toast.success("Login Successful");
       setTimeout(() => navigate("/wellcome"), 2000);
