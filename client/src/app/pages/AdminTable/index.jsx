@@ -62,7 +62,7 @@ const Index = () => {
   };
 
   const handleDownload = (filePath) => {
-    console.log(filePath, "file pathbkf");
+    console.log(filePath, "file akl");
     fetchCsvData(filePath, (sanitizedData) => {
       if (sanitizedData.length > 0) {
         const csv = Papa.unparse(sanitizedData); // Convert sanitized data to CSV string
