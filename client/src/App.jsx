@@ -20,10 +20,11 @@ function App() {
   const navigate = useNavigate();
   const user = localStorage.getItem("token");
 
-  if (admin) {
+  if (JSON.parse(user).user.email === "admin@gmail.com") {
+    setAdmin(true);
     navigate("/adminTable");
   }
-
+  // console.log(JSON.parse(user).user.email, "userr");
   return (
     <Routes>
       {user && <Route path="/" exact element={<Main />} />}
