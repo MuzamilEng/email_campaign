@@ -17,7 +17,7 @@ const useFetch = () => {
   // Function to fetch and parse CSV data
   const fetchCsvData = async (filePath, callback) => {
     try {
-      const response = await fetch(`http://apps.wahix.com/csv/${filePath}`);
+      const response = await fetch(filePath);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
