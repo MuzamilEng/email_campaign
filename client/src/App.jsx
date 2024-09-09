@@ -16,15 +16,8 @@ import FileUploadByAdmin from "./app/pages/FileUploadByAdmin";
 import Wellcome from "./app/pages/Wellcome";
 
 function App() {
-  const [admin, setAdmin] = useState(false);
   const navigate = useNavigate();
-  const user = localStorage.getItem("token");
 
-  if (JSON.parse(user).user.email === "admin@gmail.com") {
-    setAdmin(true);
-    navigate("/adminTable");
-  }
-  // console.log(JSON.parse(user).user.email, "userr");
   return (
     <Routes>
       {user && <Route path="/" exact element={<Main />} />}

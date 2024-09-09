@@ -15,8 +15,7 @@ const Signup = () => {
     penCardNumber: "",
   });
 
-  const [signupMutation, { isLoading, isError, error, data, isSuccess }] =
-    useSignupMutation();
+  const [signupMutation, { isLoading, isError, error, data, isSuccess }] = useSignupMutation();
 
   const handleChange = ({ currentTarget: input }) => {
     setFormData({ ...formData, [input.name]: input.value });
@@ -26,7 +25,6 @@ const Signup = () => {
     e.preventDefault();
     try {
       await signupMutation(formData).unwrap();
-
       setFormData({
         firstName: "",
         lastName: "",
@@ -35,6 +33,9 @@ const Signup = () => {
         penCardNumber: "",
       });
       toast.success("Registered successfully");
+      if (formData.email === "admin@gmail.com") {
+        navigate("/admin");
+      }
     } catch (err) {
       toast.error(err?.data?.error || "Signup failed");
     }
@@ -126,9 +127,7 @@ const Signup = () => {
               required
               className={styles.input}
             />
-            {isError && (
-              <div className={styles.error_msg}>{error?.data?.error}</div>
-            )}
+            {isError && <div className={styles.error_msg}>{error?.data?.error}</div>}
             <button type="submit" className={styles.green_btn}>
               {isLoading ? "Loading..." : "Sign up"}
             </button>
