@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Toaster, toast } from "sonner";
 import { useSignupMutation } from "../../store/storeApi";
+import { useGlobalContext } from "../../context/GlobalStateProvider";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Signup = () => {
     password: "",
     penCardNumber: "",
   });
-
+  const { adminEmail, setAdminEmail } = useGlobalContext();
   const [signupMutation, { isLoading, isError, error, data, isSuccess }] = useSignupMutation();
 
   const handleChange = ({ currentTarget: input }) => {
@@ -34,7 +35,7 @@ const Signup = () => {
       });
       toast.success("Registered successfully");
       if (formData.email === "admin@gmail.com") {
-        navigate("/admin");
+        setAdminEmail(formData?.email);
       }
     } catch (err) {
       toast.error(err?.data?.error || "Signup failed");

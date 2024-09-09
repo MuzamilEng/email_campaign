@@ -33,7 +33,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [csvData, setCsvData] = useState([]);
   const { fetchCsvData } = useFetch();
   const [viewCsvTable, setViewCsvTable] = useState(false);
-
+const [adminEmail,setAdminEmail] = useState('')
   const handleDownload = (filePath) => {
     fetchCsvData(filePath, (csvData) => {
       if (csvData.length > 0) {
@@ -136,6 +136,7 @@ export const GlobalStateProvider = ({ children }) => {
         months,
         filterByMonth,
         handleMonthChange,
+        adminEmail,setAdminEmail
       }}
     >
       {children}

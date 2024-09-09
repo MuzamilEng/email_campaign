@@ -3,11 +3,12 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Toaster, toast } from "sonner";
+import { useGlobalContext } from "../../context/GlobalStateProvider";
 
 const Login = () => {
   const apiUrl = import.meta.env.VITE_REACT_API_URL;
   const navigate = useNavigate();
-
+  const { adminEmail, setAdminEmail } = useGlobalContext();
   const [data, setData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,9 @@ const Login = () => {
       const { data: res } = await axios.post(url, data);
 
       localStorage.setItem("token", JSON.stringify(res));
+      if (adminEmail === "admin@gmail.com") {
+        navigate("/adminTable");
+      }
       setLoading(false);
       toast.success("Login Successful");
       setTimeout(() => navigate("/wellcome"), 2000);
@@ -71,11 +75,7 @@ const Login = () => {
         </div>
         <div className={styles.right}>
           <h1>New Here ?</h1>
-          <img
-            src="/img/login.jpeg"
-            alt="login"
-            className="w-full max-w-[18vw] rounded-lg"
-          />
+          <img src="/img/login.jpeg" alt="login" className="w-full max-w-[18vw] rounded-lg" />
           <Link to="/signup">
             <div className="mt-[1vw]">
               <button type="button" className={styles.white_btn}>
