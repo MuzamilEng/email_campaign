@@ -16,11 +16,10 @@ import FileUploadByAdmin from "./app/pages/FileUploadByAdmin";
 import Wellcome from "./app/pages/Wellcome";
 
 function App() {
-  const navigate = useNavigate();
-
+  // console.log(JSON.parse(user).user.email, "userr");
   return (
     <Routes>
-      {user && <Route path="/" exact element={<Main />} />}
+      <Route path="/" exact element={<Main />} />
       <Route path="/signup" exact element={<Signup />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="/" element={<Navigate replace to="/login" />} />
