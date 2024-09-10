@@ -17,6 +17,10 @@ export const storeApi = createApi({
       query: (id) => `/getAdminData/${id}`,
       providesTags: ["Post"],
     }),
+    adminRecords: builder.query({
+      query: () => `/getAdminRecords`,
+      providesTags: ["Post"],
+    }),
     getInvoicesDetails: builder.query({
       query: () => `/getInvoicesDetails`,
       providesTags: ["Post"],
@@ -92,4 +96,5 @@ export const {
   useUploadReportMutation,
   useSignupMutation,
   useGetLogedinUserQuery,
+  useAdminRecordsQuery,
 } = storeApi;

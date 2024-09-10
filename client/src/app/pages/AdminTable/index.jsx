@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  useAdminRecordsQuery,
   useDeleteAdminDataMutation,
   useGetAllRecordsQuery,
   useUpdateAdminStatusMutation,
@@ -17,7 +18,7 @@ import AdminTable from "../../components/AdminTable";
 const Index = () => {
   const [idToDelete, setIdToDelete] = useState(null);
   const apiUrl = "http://api.apps.wahix.com/api/v1" || import.meta.env.VITE_REACT_API_URL;
-  const { isError, isLoading, data, refetch: refetchStatus } = useGetAllRecordsQuery();
+  const { isError, isLoading, data, refetch: refetchStatus } = useAdminRecordsQuery();
   const [deleteAdminData, { isLoading: isDeleting, isError: deleteError }] =
     useDeleteAdminDataMutation();
   const navigate = useNavigate();

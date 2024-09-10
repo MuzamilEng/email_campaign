@@ -7,6 +7,7 @@ const {
   deleteAdminData,
   Invoice,
   getInvoicesDetails,
+  getAdminRecords,
 } = require("../controllers/handleCsv");
 const { upload } = require("../utils/multer");
 const { getCurrentUser } = require("../controllers/getCurrentUser");
@@ -18,4 +19,5 @@ router.route("/updateRecord/:id").put(upload.single("file"), updateRecord);
 router.route("/deleteRecord/:id").delete(deleteAdminData);
 router.route("/getInvoicesDetails").get(getInvoicesDetails);
 router.route("/getCurrentUser").get(authenticateJWT, getCurrentUser);
+router.route('/getAdminRecords').get(getAdminRecords)
 module.exports = router;

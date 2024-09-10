@@ -238,3 +238,15 @@ exports.getAdminData = async (req, res, next) => {
     return next(new CustomError(err.message, 500));
   }
 };
+exports.getAdminRecords = async (req, res, next) => {
+  try {
+    const csv = await CSV.find();
+    res.status(200).json({
+      success: true,
+      data: csv,
+    });
+  } catch (err) {
+    console.log(err.message);
+    return next(new CustomError(err.message, 500));
+  }
+};
