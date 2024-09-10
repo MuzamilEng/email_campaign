@@ -33,7 +33,7 @@ export const GlobalStateProvider = ({ children }) => {
   const [csvData, setCsvData] = useState([]);
   const { fetchCsvData } = useFetch();
   const [viewCsvTable, setViewCsvTable] = useState(false);
-const [adminEmail,setAdminEmail] = useState('')
+  const [adminEmail, setAdminEmail] = useState("");
   const handleDownload = (filePath) => {
     fetchCsvData(filePath, (csvData) => {
       if (csvData.length > 0) {
@@ -99,7 +99,7 @@ const [adminEmail,setAdminEmail] = useState('')
       handleDownload(newPath);
     }
   }, [invoicesDetails?.data?.filePath]);
-
+  console.log(invoicesDetails, "invoice details");
   useEffect(() => {
     if (csvViewData) {
       const filteredData = csvViewData?.filter((item) => item?.pan == userPenCardNumber);
@@ -136,7 +136,8 @@ const [adminEmail,setAdminEmail] = useState('')
         months,
         filterByMonth,
         handleMonthChange,
-        adminEmail,setAdminEmail
+        adminEmail,
+        setAdminEmail,
       }}
     >
       {children}

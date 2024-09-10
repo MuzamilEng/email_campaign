@@ -23,7 +23,7 @@ export const storeApi = createApi({
     }),
     getInvoicesDetails: builder.query({
       query: () => `/getInvoicesDetails`,
-      providesTags: ["Post"],
+      providesTags: ["getInvoice"],
     }),
     deleteRecodById: builder.mutation({
       query: (id) => ({
@@ -58,7 +58,7 @@ export const storeApi = createApi({
         method: "POST",
         body: data,
       }),
-      providesTags: ["User"],
+      invalidatesTags: ["getInvoice"],
     }),
     updateRecord: builder.mutation({
       query: ({ id, data }) => ({

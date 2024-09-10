@@ -6,12 +6,15 @@ const User = require("../models/User");
 const Invoice = require("../models/invoices");
 const uploadOnCloudinary = require("../utils/cloudinary");
 const path = require("path");
+
 exports.Invoice = async function (req, res) {
   try {
+    const fileOnCloudinary = await uploadOnCloudinary(req.file.path);
+    // console.log(fileOnCloudinary, "file on cloudinary hudson upload");
     const invoiceRecord = new Invoice({
       fileName: req?.file?.originalname,
       filePath: req?.file?.path,
-      file: req?.file?.filename,
+      file: fileOnCloudinary,
     });
     // Save the record to the database
     await invoiceRecord.save();
