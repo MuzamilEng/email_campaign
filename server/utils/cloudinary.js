@@ -13,17 +13,20 @@ const uploadOnCloudinary = async (localPath) => {
     if (!localPath) {
       return null;
     }
-    // Upload the image to Cloudinary
-    const result = await cloudinary.uploader.upload(localPath);
+
+    // Upload the file to Cloudinary as raw resource
+    const result = await cloudinary.uploader.upload(localPath, {
+      resource_type: "raw", // Specify 'raw' for non-image files
+    });
 
     // Delete the local file after successful upload
     fs.unlinkSync(localPath);
 
-    // Return the secure URL of the uploaded image
+    // Return the secure URL of the uploaded file
     return result.secure_url;
   } catch (err) {
     // Handle errors
-    console.error("Error uploading image to Cloudinary:", err);
+    console.error("Error uploading file to Cloudinary:", err);
 
     // Delete the local file even if upload fails
     if (localPath) {

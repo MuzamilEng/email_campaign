@@ -4,7 +4,8 @@ const fs = require("fs");
 const csvParser = require("csv-parser");
 const User = require("../models/User");
 const Invoice = require("../models/invoices");
-
+const uploadOnCloudinary = require("../utils/cloudinary");
+const path = require("path");
 exports.Invoice = async function (req, res) {
   try {
     const invoiceRecord = new Invoice({
@@ -88,10 +89,19 @@ exports.UploadCsv = async function (req, res) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
+    // Upload the CSV file to Cloudinary
+    const filePath = path.resolve(req.file.path);
+    console.log("filePath:", filePath);
+    const cloudinaryUrl = await uploadOnCloudinary(filePath);
+    console.log("Cloudinary URL:", cloudinaryUrl);
+
+    if (!cloudinaryUrl) {
+      return res.status(500).json({ message: "Failed to upload file to Cloudinary" });
+    }
+
+    // Save the Cloudinary URL and other file info to the database
     const campaignRecord = new CSV({
-      fileName: req.file.originalname,
-      filePath: req.file.path,
-      file: req.file.filename,
+      file: cloudinaryUrl,
       name,
       noOfPoints,
       status: "Waiting",
@@ -103,9 +113,10 @@ exports.UploadCsv = async function (req, res) {
     res.status(200).json({
       campaignRecord,
       fileName: req.file.originalname,
+      cloudinaryUrl: cloudinaryUrl,
     });
   } catch (error) {
-    console.error("Error in fileController/upload:", error);
+    console.error("Error in fileController/UploadCsv:", error);
     res.status(500).send("Internal server error");
   }
 };

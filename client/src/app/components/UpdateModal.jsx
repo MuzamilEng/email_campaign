@@ -47,7 +47,7 @@ function UpdateModal({id}) {
   const handleFileChange = (file) => {
         setSelectedFile(file);
     };
-    console.log(selectedFile, "file");
+    // console.log(selectedFile, "file");
   
     const onSubmit = async () => {
       try {

@@ -1,11 +1,22 @@
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-
 const path = require("path");
+const fs = require("fs");
+
+// Helper function to create the directory if it doesn't exist
+const ensureDirectoryExists = (directory) => {
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const destinationPath = path.resolve(__dirname, "../../client/public/csv");
+    const destinationPath = path.resolve(__dirname, "public/temp");
+
+    // Ensure the directory exists
+    ensureDirectoryExists(destinationPath);
+
     cb(null, destinationPath);
   },
   filename: (req, file, cb) => {
@@ -15,9 +26,13 @@ const storage = multer.diskStorage({
     cb(null, uniqueFilename);
   },
 });
+
 const reportStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const destinationPath = path.resolve(__dirname, "../../client/public/csv");
+    const destinationPath = path.resolve(__dirname, "public/temp");
+
+    // Ensure the directory exists
+    ensureDirectoryExists(destinationPath);
 
     cb(null, destinationPath);
   },
