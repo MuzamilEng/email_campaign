@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  useDeleteAdminDataMutation,
-  useGetAllRecordsQuery,
-} from "../../store/storeApi";
+import { useDeleteAdminDataMutation, useGetAllRecordsQuery } from "../../store/storeApi";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { FormPopup } from "../../components/Popups";
 import { useGlobalContext } from "../../context/GlobalStateProvider";
@@ -28,12 +25,8 @@ const Index = () => {
   const [popup, setPopup] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
   const { uploadFile, userReport, setUserReport } = useGlobalContext();
-  const {
-    isError,
-    isLoading,
-    data,
-    refetch: refetchUserData,
-  } = useGetAllRecordsQuery();
+  const [id, setId] = useState("");
+  const { isError, isLoading, data, refetch: refetchUserData } = useGetAllRecordsQuery(id);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const tableHeads = ["Check", "Created at", "Report Name", "Action"];
@@ -69,8 +62,10 @@ const Index = () => {
 
   useEffect(() => {
     refetchUserData();
+    const id = JSON.parse(localStorage.getItem("token"));
+    setId(id?.user?._id);
   }, [uploadFile]);
-
+  console.log(id, "iddddd");
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -102,15 +97,7 @@ const Index = () => {
   return (
     <>
       <div className="flex justify-center items-center -mt-[1vw] w-full">
-        {isError && (
-          <div className="flex fixed inset-0 text-[1vw] text-gray-800 justify-center items-center w-full h-screen">
-            Error loading data! please try again later
-          </div>
-        )}{" "}
-        <TableContainer
-          component={Paper}
-          className="w-full max-w-[70vw] shadow rounded mt-[2vw]"
-        >
+        <TableContainer component={Paper} className="w-full max-w-[70vw] shadow rounded mt-[2vw]">
           <Table>
             <TableHead className="">
               <TableRow>

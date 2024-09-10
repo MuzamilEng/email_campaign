@@ -14,7 +14,7 @@ export const storeApi = createApi({
   tagTypes: ["Post", "currentUser"],
   endpoints: (builder) => ({
     getAllRecords: builder.query({
-      query: () => `/getAdminData`,
+      query: (id) => `/getAdminData/${id}`,
       providesTags: ["Post"],
     }),
     getInvoicesDetails: builder.query({

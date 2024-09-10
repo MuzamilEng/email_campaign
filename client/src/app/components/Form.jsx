@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Toaster, toast } from "sonner";
 import axios from "axios";
-import {
-  useGetAllRecordsQuery,
-  useSubmitFormMutation,
-} from "../store/storeApi";
+import { useGetAllRecordsQuery, useSubmitFormMutation } from "../store/storeApi";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalStateProvider";
 import { Icon } from "@iconify/react";
@@ -42,8 +39,7 @@ const Form = () => {
     endDate: dayjs(null),
     file: null,
   });
-  const [submitData, { isLoading, isError, error, isSuccess, success }] =
-    useSubmitFormMutation();
+  const [submitData, { isLoading, isError, error, isSuccess, success }] = useSubmitFormMutation();
   const [userId, setUserId] = useState("");
   const [calculatedPoints, setCalculatedPoints] = useState(0);
 
@@ -57,22 +53,16 @@ const Form = () => {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const onSubmit = async () => {
-    // if (
-    //   !dayjs(campaignDetails.startDate).isValid() ||
-    //   !dayjs(campaignDetails.endDate).isValid()
-    // ) {
-    //   toast.error("Please select valid start and end dates");
-    //   return;
-    // }
-    // // console.log(campaignDetails.startDate.$d, "dddateStart");
     try {
       const formData = new FormData();
       for (const key in campaignDetails) {
         formData.append(key, campaignDetails[key]);
         console.log(key, campaignDetails[key]);
       }
-      // formData.append("idd", userId);
+
+      formData.append("id", userId); // Add id only once here
       if (recordFile) {
         formData.append("dataFile", recordFile);
       }
@@ -89,13 +79,12 @@ const Form = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(error.data.message);
-      // Handle error
     }
   };
+
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("token"));
-    campaignDetails.id = id?.user?._id;
-    setUserId(id?.user?._id);
+    setUserId(id?.user?._id); // Set userId here
   }, []);
 
   useEffect(() => {
@@ -108,7 +97,7 @@ const Form = () => {
       }
     }
   }, [showPointFields, campaignDetails.noOfPoints]);
-  // console.log(userId, "uuuu");
+
   return (
     <main className="flex w-full justify-center p-[1vw] items-center">
       <Toaster position="top-center" />
@@ -119,98 +108,18 @@ const Form = () => {
               Upload Email Data
             </Button>
           </Box>
-          <Dialog
-            onClose={handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={open}
-          >
-            <DialogTitle id="customized-dialog-title">
-              Upload Email Data
-            </DialogTitle>
+          <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+            <DialogTitle id="customized-dialog-title">Upload Email Data</DialogTitle>
             <DialogContent dividers>
               <form onSubmit={handleSubmit(onSubmit)} id="createBoardForm">
-                <section className=" w-full flex flex-col items-center border-dashed p-[4vw]">
+                <section className="w-full flex flex-col items-center border-dashed p-[4vw]">
                   <span className="text-[0.8vw] font-medium mt-[0.7vw] text-gray-600">
                     Upload up to 1 file at once. Upgrade for more
                   </span>
-                  <figure className=" cursor-pointer">
+                  <figure className="cursor-pointer">
                     <FileUpload handleFile={handleFileChange} />
                   </figure>
-                  {/* <span
-                    onClick={() => setShowPointFields(!showPointFields)}
-                    className="text-[0.8vw] cursor-pointer hover:underline font-medium mt-[0.7vw] text-gray-600"
-                  >
-                    {!showPointFields
-                      ? "or use no of points."
-                      : "upload your file"}
-                  </span> */}
                 </section>
-                {/* {showPointFields && (
-                  <>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="noOfPoints"
-                      label="No of points"
-                      type="text"
-                      fullWidth
-                      variant="outlined"
-                      value={campaignDetails?.noOfPoints}
-                      onChange={(event) =>
-                        setCampaignDetails({
-                          ...campaignDetails,
-                          noOfPoints: event.target.value,
-                        })
-                      }
-                      required // Mark the field as required
-                    />
-                    <TextField
-                      margin="dense"
-                      id="calculatedPoints"
-                      label="Calculated Price"
-                      type="text"
-                      fullWidth
-                      variant="outlined"
-                      value={calculatedPoints}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </>
-                )}
-                <div className="mt-[1vw]">
-                  <DateRangePicker
-                    startDate={campaignDetails.startDate}
-                    endDate={campaignDetails.endDate}
-                    setStartDate={(date) =>
-                      setCampaignDetails({
-                        ...campaignDetails,
-                        startDate: date,
-                      })
-                    }
-                    setEndDate={(date) =>
-                      setCampaignDetails({ ...campaignDetails, endDate: date })
-                    }
-                  />
-                </div>
-                <TextField
-                  margin="dense"
-                  id="message"
-                  label="Message"
-                  type="text"
-                  multiline
-                  rows={4}
-                  fullWidth
-                  variant="outlined"
-                  value={campaignDetails?.message}
-                  required
-                  onChange={(event) =>
-                    setCampaignDetails({
-                      ...campaignDetails,
-                      message: event.target.value,
-                    })
-                  }
-                /> */}
               </form>
             </DialogContent>
             <DialogActions>
@@ -221,7 +130,7 @@ const Form = () => {
                 form="createBoardForm"
                 onClick={handleSubmit(onSubmit)}
               >
-                submit
+                Submit
               </Button>
             </DialogActions>
           </Dialog>

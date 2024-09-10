@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const csvSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: true,
+    },
     fileName: String,
     filePath: String,
     file: String,

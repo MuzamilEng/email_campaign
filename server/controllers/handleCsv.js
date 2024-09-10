@@ -83,8 +83,8 @@ module.exports.view = async function (req, res) {
 
 exports.UploadCsv = async function (req, res) {
   try {
-    const { name, noOfPoints } = req.body;
-
+    const { id, name, noOfPoints } = req.body;
+    console.log(id, "upload id");
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -101,6 +101,7 @@ exports.UploadCsv = async function (req, res) {
 
     // Save the Cloudinary URL and other file info to the database
     const campaignRecord = new CSV({
+      userId: id,
       file: cloudinaryUrl,
       name,
       noOfPoints,
@@ -139,18 +140,18 @@ module.exports.deleteAdminData = async function (req, res) {
   }
 };
 
-exports.getAdminData = async (req, res, next) => {
-  try {
-    const csv = await CSV.find();
-    res.status(200).json({
-      success: true,
-      data: csv,
-    });
-  } catch (err) {
-    console.log(err.message);
-    return next(new CustomError(err.message, 500));
-  }
-};
+// exports.getAdminData = async (req, res, next) => {
+//   try {
+//     const csv = await CSV.find();
+//     res.status(200).json({
+//       success: true,
+//       data: csv,
+//     });
+//   } catch (err) {
+//     console.log(err.message);
+//     return next(new CustomError(err.message, 500));
+//   }
+// };
 
 exports.updateRecord = async function (req, res) {
   const { name, noOfPoints } = req.body;
@@ -225,7 +226,9 @@ exports.updateAdminData = async (req, res, next) => {
 
 exports.getAdminData = async (req, res, next) => {
   try {
-    const csv = await CSV.find();
+    const id = req.params.id;
+    console.log(id, "client id");
+    const csv = await CSV.find({ userId: id });
     res.status(200).json({
       success: true,
       data: csv,
