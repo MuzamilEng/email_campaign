@@ -25,6 +25,11 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (formData.email === "admin@gmail.com" && formData.password !== "admin") {
+        toast.error("Invalid admin credentials. Please check your password.");
+        return;
+      }
+
       await signupMutation(formData).unwrap();
       setFormData({
         firstName: "",
@@ -32,9 +37,10 @@ const Signup = () => {
         email: "",
         password: "",
         penCardNumber: "",
+        phoneNumber: "",
       });
       toast.success("Registered successfully");
-      if (formData.email === "admin@gmail.com") {
+      if (formData.email === "admin@gmail.com" && formData.password === "admin") {
         setAdminEmail(formData?.email);
       }
     } catch (err) {

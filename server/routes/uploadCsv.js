@@ -16,8 +16,8 @@ router.route("/upload").post(upload.single("dataFile"), UploadCsv);
 router.route("/uploadInvoice").post(upload.single("invoiceDetail"), Invoice);
 router.route("/getAdminData/:id").get(getAdminData);
 router.route("/updateRecord/:id").put(upload.single("file"), updateRecord);
-router.route("/deleteRecord/:id").delete(deleteAdminData);
+router.route("/deleteRecord").delete(deleteAdminData);
 router.route("/getInvoicesDetails").get(getInvoicesDetails);
 router.route("/getCurrentUser").get(authenticateJWT, getCurrentUser);
-router.route('/getAdminRecords').get(getAdminRecords)
+router.route("/getAdminRecords").get(getAdminRecords);
 module.exports = router;

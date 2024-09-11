@@ -10,10 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  useDeleteRecodByIdMutation,
-  useGetAllRecordsQuery,
-} from "../store/storeApi";
+import { useDeleteRecodByIdMutation } from "../store/storeApi";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -25,11 +22,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function DeleteModal({ id }) {
-  const { data, refetch } = useGetAllRecordsQuery();
-  const [deleteRecord, { isSuccess, isError }] = useDeleteRecodByIdMutation();
+  const [deleteRecord, { isLoading, isSuccess, isError }] = useDeleteRecodByIdMutation();
 
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -38,23 +34,24 @@ function DeleteModal({ id }) {
     setOpen(false);
   };
 
-  function deleteBoard() {
-    setLoading(true);
+  const deleteBoard = async () => {
     try {
-      deleteRecord(id);
-      setLoading(false);
-      refetch();
-      toast.success("Board deleted successfully");
-      setOpen(false);
+      await deleteRecord({ id: id }).unwrap();
     } catch (error) {
       toast.error("Error during board deletion");
+    }
+  };
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      toast.success("Board deleted successfully");
       setOpen(false);
     }
-  }
-  if (isSuccess) {
-    toast.success("Board deleted successfully");
-    setOpen(false);
-  }
+    if (isError) {
+      toast.error("Error during board deletion");
+    }
+  }, [isSuccess, isError]);
+
   return (
     <>
       <Tooltip title="Delete">
@@ -65,25 +62,15 @@ function DeleteModal({ id }) {
         />
       </Tooltip>
       <ToastContainer />
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title">Delete Board</DialogTitle>
         <DialogContent dividers>
           <Typography>Are you sure you want to delete this board?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            variant="contained"
-            color={"error"}
-            type="submit"
-            form="createBoardForm"
-            onClick={() => deleteBoard(id)}
-          >
-            {loading ? "Deleting..." : "yes"}
+          <Button variant="contained" color="error" onClick={deleteBoard} disabled={isLoading}>
+            {isLoading ? "Deleting..." : "Yes"}
           </Button>
         </DialogActions>
       </BootstrapDialog>

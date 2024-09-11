@@ -127,16 +127,11 @@ exports.UploadCsv = async function (req, res) {
 /* ------------------ EXPORTING FUNCTION To delete the file ------------------ */
 module.exports.deleteAdminData = async function (req, res) {
   try {
-    const csvFile = await CSV.findById(req.params.id);
+    const csvFile = await CSV.findById(req.body.id);
     console.log(csvFile, "csvFile");
-    await CSV.findByIdAndDelete(req.params.id);
+    await CSV.findByIdAndDelete(req.body.id);
+    res.status(200).json({ message: "File deleted successfully" });
     console.log("File deleted successfully");
-    fs.unlink(csvFile?.filePath, (err) => {
-      if (err) {
-        console.error("Error deleting the file:", err);
-        return res.status(500).send("Internal server error");
-      }
-    });
   } catch (error) {
     console.log("Error in fileController/delete", error);
     return res.status(500).send("Internal server error");

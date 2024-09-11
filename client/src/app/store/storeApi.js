@@ -26,9 +26,10 @@ export const storeApi = createApi({
       providesTags: ["getInvoice"],
     }),
     deleteRecodById: builder.mutation({
-      query: (id) => ({
-        url: `/deleteRecord/${id}`,
+      query: (data) => ({
+        url: `/deleteRecord`,
         method: "DELETE",
+        body: data,
       }),
       invalidatesTags: ["Post"],
     }),

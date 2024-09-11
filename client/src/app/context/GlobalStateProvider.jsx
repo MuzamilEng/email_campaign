@@ -54,7 +54,7 @@ export const GlobalStateProvider = ({ children }) => {
     let filename = filePath;
     return filename;
   }
-  console.log(csvViewData, "myData");
+  // console.log(csvViewData, "myData");
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
@@ -100,9 +100,10 @@ export const GlobalStateProvider = ({ children }) => {
     }
   }, [invoicesDetails?.data?.filePath]);
   console.log(invoicesDetails, "invoice details");
+
   useEffect(() => {
     if (csvViewData) {
-      const filteredData = csvViewData?.filter((item) => item?.pan == userPenCardNumber);
+      const filteredData = csvViewData?.filter((item) => item?.pan === userPenCardNumber);
       // console.log(filteredData, "filteredData");
       setCurrentUserInvoiveData(filteredData);
       setMonthlyInvoice(filteredData);
