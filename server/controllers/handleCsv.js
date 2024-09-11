@@ -88,6 +88,8 @@ exports.UploadCsv = async function (req, res) {
   try {
     const { id, name, noOfPoints } = req.body;
     console.log(id, "upload id");
+    const user = await User.findById(id);
+    console.log(user?.firstName, "user");
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -96,7 +98,7 @@ exports.UploadCsv = async function (req, res) {
     const filePath = path.resolve(req.file.path);
     console.log("filePath:", filePath);
     const cloudinaryUrl = await uploadOnCloudinary(filePath);
-    console.log("Cloudinary URL:", cloudinaryUrl);
+    // console.log("Cloudinary URL:", cloudinaryUrl);
 
     if (!cloudinaryUrl) {
       return res.status(500).json({ message: "Failed to upload file to Cloudinary" });
@@ -105,6 +107,7 @@ exports.UploadCsv = async function (req, res) {
     // Save the Cloudinary URL and other file info to the database
     const campaignRecord = new CSV({
       userId: id,
+      firstName: user?.firstName,
       file: cloudinaryUrl,
       name,
       noOfPoints,

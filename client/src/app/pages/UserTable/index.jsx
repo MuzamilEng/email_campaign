@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useDeleteAdminDataMutation, useGetAllRecordsQuery } from "../../store/storeApi";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { useGetAllRecordsQuery } from "../../store/storeApi";
 import { useGlobalContext } from "../../context/GlobalStateProvider";
-import DownloadIcon from "@mui/icons-material/Download";
 import Loading from "../../components/Loading";
 import {
   TableContainer,
@@ -19,6 +17,7 @@ import {
 } from "@mui/material";
 import DeleteModal from "../../components/DeleteModal";
 import UpdateModal from "../../components/UpdateModal";
+import { FaCalendarAlt, FaFileDownload, FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const Index = () => {
   const [page, setPage] = useState(0);
@@ -28,7 +27,7 @@ const Index = () => {
 
   const { isLoading, data, refetch: refetchUserData } = useGetAllRecordsQuery(id);
 
-  const tableHeads = ["Check", "Created at", "Report Name", "Action"];
+  const tableHeads = ["Created at", "Report Name", "Action"];
 
   const formatDate = useCallback((dateString) => {
     const options = {
@@ -75,17 +74,16 @@ const Index = () => {
   }
 
   return (
-    <div className="flex justify-center items-center -mt-[1vw] w-full">
-      <TableContainer component={Paper} className="w-full max-w-[70vw] shadow rounded mt-[2vw]">
+    <div className="flex justify-center items-center w-full py-8">
+      <TableContainer
+        component={Paper}
+        className="w-full max-w-4xl shadow-lg rounded-lg overflow-hidden"
+      >
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow className="bg-gray-100">
               {tableHeads.map((item, index) => (
-                <TableCell
-                  key={index}
-                  style={{ fontWeight: "bold" }}
-                  className="text-md px-6 py-2 border-r border-solid w-1/6 text-start whitespace-nowrap hover:bg-[#d4f1ff]"
-                >
+                <TableCell key={index} className="font-bold text-gray-700 px-6 py-4 text-left">
                   {item}
                 </TableCell>
               ))}
@@ -93,14 +91,12 @@ const Index = () => {
           </TableHead>
           <TableBody>
             {data?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
-              <TableRow key={item._id} className="hover:bg-[#f0faff]">
-                <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
-                  <input type="checkbox" />
-                </TableCell>
-                <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+              <TableRow key={item._id} className="hover:bg-gray-50 transition-colors duration-200">
+                <TableCell className="px-6 py-4 flex items-center">
+                  <FaCalendarAlt className="mr-2 text-gray-500" />
                   {formatDate(item.createdAt)}
                 </TableCell>
-                <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
+                <TableCell className="px-6 py-4">
                   {item?.reportFile ? (
                     <Tooltip title="Download Report">
                       <Box
@@ -111,23 +107,35 @@ const Index = () => {
                           gap: 1,
                           cursor: "pointer",
                           color: "primary.main",
-                          textDecoration: "underline",
                         }}
+                        className="hover:underline"
                       >
-                        <DownloadIcon />
+                        <FaFileDownload />
                         <Typography variant="body2" component="span">
                           Download
                         </Typography>
                       </Box>
                     </Tooltip>
                   ) : (
-                    "No Report"
+                    <span className="text-gray-500">No Report</span>
                   )}
                 </TableCell>
-                <TableCell className="text-md p-[0.5vw] hover:underline hover:font-medium border-r border-solid hover:cursor-pointer">
-                  <div className="flex gap-2 justify-center">
-                    <UpdateModal id={item._id} />
-                    <DeleteModal id={item._id} />
+                <TableCell className="px-6 py-4">
+                  <div className="flex gap-4">
+                    <Tooltip title="Update">
+                      <Box className="cursor-pointer text-blue-600 hover:text-blue-800">
+                        <UpdateModal id={item._id}>
+                          <FaEdit size={18} />
+                        </UpdateModal>
+                      </Box>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <Box className="cursor-pointer text-red-600 hover:text-red-800">
+                        <DeleteModal id={item._id}>
+                          <FaTrashAlt size={18} />
+                        </DeleteModal>
+                      </Box>
+                    </Tooltip>
                   </div>
                 </TableCell>
               </TableRow>
@@ -142,6 +150,7 @@ const Index = () => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          className="bg-gray-50"
         />
       </TableContainer>
     </div>

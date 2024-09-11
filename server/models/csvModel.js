@@ -5,6 +5,9 @@ const csvSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    firstName: {
+      type: String,
+    },
     fileName: String,
     filePath: String,
     file: String,
