@@ -27,6 +27,7 @@ export const GlobalStateProvider = ({ children }) => {
 
   const currentUser = JSON.parse(localStorage.getItem("token"));
   const userPenCardNumber = currentUser?.user?.penCardNumber;
+
   const [open, setOpen] = React.useState(false);
   const [searchMonth, setSearchMonth] = React.useState("");
   const navigate = useNavigate();
@@ -98,19 +99,29 @@ export const GlobalStateProvider = ({ children }) => {
       const newPath = removeInitialPath(invoicesDetails?.data?.file);
       handleDownload(newPath);
     }
-  }, [invoicesDetails?.data?.filePath]);
-  console.log(invoicesDetails, "invoice details");
+  }, [invoicesDetails?.data?.file]);
+  // console.log(invoicesDetails, "invoice details");
 
   useEffect(() => {
+    let arr = [];
     if (csvViewData) {
-      const filteredData = csvViewData?.filter((item) => item?.pan === userPenCardNumber);
-      // console.log(filteredData, "filteredData");
+      console.log(typeof userPenCardNumber, "pan number");
+      console.log(csvViewData[1].pan, "csvViewData");
+      console.log(csvViewData[1]?.pan, "csvViewData");
+
+      const filteredData = csvViewData.filter((item) => {
+        console.log(item.pan, "csvViewData only pan");
+        return item.pan == userPenCardNumber;
+      });
+
+      console.log(filteredData, "filteredData");
+      console.log(csvViewData, "csvViewData");
       setCurrentUserInvoiveData(filteredData);
       setMonthlyInvoice(filteredData);
     }
-  }, [csvViewData]);
+  }, [csvViewData, userPenCardNumber]);
 
-  console.log(currentUserInvoiveData, "current data");
+  // console.log(currentUserInvoiveData, "current data");
 
   return (
     <GlobalStateContext.Provider
