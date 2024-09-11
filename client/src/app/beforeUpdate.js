@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Toaster, toast } from "sonner";
 import axios from "axios";
-import {
-  useGetAllRecordsQuery,
-  useSubmitFormMutation,
-} from "../store/storeApi";
+import { useGetAllRecordsQuery, useSubmitFormMutation } from "../store/storeApi";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalStateProvider";
 import { Icon } from "@iconify/react";
@@ -42,8 +39,7 @@ const Form = () => {
     endDate: dayjs(null),
     file: null,
   });
-  const [submitData, { isLoading, isError, error, isSuccess, success }] =
-    useSubmitFormMutation();
+  const [submitData, { isLoading, isError, error, isSuccess, success }] = useSubmitFormMutation();
   const [userId, setUserId] = useState("");
   const [calculatedPoints, setCalculatedPoints] = useState(0);
 
@@ -58,19 +54,15 @@ const Form = () => {
     setOpen(true);
   };
   const onSubmit = async () => {
-    if (
-      !dayjs(campaignDetails.startDate).isValid() ||
-      !dayjs(campaignDetails.endDate).isValid()
-    ) {
+    if (!dayjs(campaignDetails.startDate).isValid() || !dayjs(campaignDetails.endDate).isValid()) {
       toast.error("Please select valid start and end dates");
       return;
     }
-    // console.log(campaignDetails.startDate.$d, "dddateStart");
+
     try {
       const formData = new FormData();
       for (const key in campaignDetails) {
         formData.append(key, campaignDetails[key]);
-        console.log(key, campaignDetails[key]);
       }
       if (recordFile) {
         formData.append("dataFile", recordFile);
@@ -82,10 +74,9 @@ const Form = () => {
       localStorage.setItem("csvData", JSON.stringify(response?.data));
       toast.success("File uploaded successfully");
       setOpen(false);
-      setCampaignDetails({})
+      setCampaignDetails({});
       refetch();
     } catch (error) {
-      console.error("Error submitting form:", error);
       toast.error(error.data.message);
       // Handle error
     }
@@ -117,14 +108,8 @@ const Form = () => {
               Upload Email Data
             </Button>
           </Box>
-          <Dialog
-            onClose={handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={open}
-          >
-            <DialogTitle id="customized-dialog-title">
-              Upload Email Data
-            </DialogTitle>
+          <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+            <DialogTitle id="customized-dialog-title">Upload Email Data</DialogTitle>
             <DialogContent dividers>
               <form onSubmit={handleSubmit(onSubmit)} id="createBoardForm">
                 <section className=" w-full flex flex-col items-center border-dashed p-[4vw]">

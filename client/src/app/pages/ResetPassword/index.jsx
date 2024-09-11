@@ -18,11 +18,9 @@ const Login = () => {
   const handleChange = (event) => {
     // setData({ ...data, [event.target.name]: event.target.value });
     setForgetEmail({ ...forgetEmail, [event.target.name]: event.target.value });
-    console.log(data);
   };
 
   const handleSubmit = async (e) => {
-    console.log("front end call");
     e.preventDefault();
     try {
       setLoading(true);
@@ -35,7 +33,6 @@ const Login = () => {
       setForgetEmail({ ...forgetEmail, otp: "", newPassword: "" });
       navigate("/login");
     } catch (error) {
-      console.log(error);
       //   setError(error.response.data.error);
       toast.error(error.response.data.error, {
         position: "top-center",

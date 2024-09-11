@@ -65,7 +65,7 @@ const fetchData = async (endpoint, config = {}) => {
         Accept: "application/json",
       },
     });
-    console.log("Data fetched successfully:", response.data);
+
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -82,12 +82,6 @@ const fetchData = async (endpoint, config = {}) => {
     throw error;
   }
 };
-
-// fetchData('wc/v3/products')
-//   .then(data => console.log('Products:', data))
-//   .catch(error => console.error('Error:', error));
-
-// Example usage:
 
 app.use(errorHandler);
 start();

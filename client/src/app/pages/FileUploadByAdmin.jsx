@@ -9,8 +9,7 @@ const FileUploadByAdmin = () => {
   const [firstName, setFirstName] = useState("");
   const ref = useRef();
   const [selectedFile, setSelectedFile] = useState();
-  const [uploadReport, { isLoading, isError, data, isSuccess }] =
-    useUploadReportMutation();
+  const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
   const handleUploadFile = async () => {
     const formData = new FormData();
     if (!selectedFile) return toast.error("Please select a file");
@@ -32,6 +31,8 @@ const FileUploadByAdmin = () => {
       draggable: true,
       progress: undefined,
     });
+    setIsModalOpen(false);
+    setSelectedFile(null);
   }
 
   return (
@@ -72,12 +73,7 @@ const FileUploadByAdmin = () => {
             Choose File
           </Button>
         </label>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          gutterBottom
-          sx={{ fontWeight: "bold" }}
-        >
+        <Typography variant="body2" color="text.secondary" gutterBottom sx={{ fontWeight: "bold" }}>
           Selected file:
           {/* Show selected file name */}
         </Typography>

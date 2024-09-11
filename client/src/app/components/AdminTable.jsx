@@ -50,7 +50,7 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 
 function AdminTable({ globalAdminData, formatDate, handleDownload }) {
   const [page, setPage] = useState(0);
-  console.log(globalAdminData, "globalAdminData");
+
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [csvFilename, setFilename] = useState(null);
   const navigate = useNavigate();

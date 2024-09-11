@@ -54,7 +54,6 @@ const Signup = () => {
   }
   useEffect(() => {
     if (data) {
-      console.log(data);
     }
   }, [data]);
 

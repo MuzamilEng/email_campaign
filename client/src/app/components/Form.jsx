@@ -59,7 +59,6 @@ const Form = () => {
       const formData = new FormData();
       for (const key in campaignDetails) {
         formData.append(key, campaignDetails[key]);
-        console.log(key, campaignDetails[key]);
       }
 
       formData.append("id", userId); // Add id only once here
@@ -77,7 +76,7 @@ const Form = () => {
 
       refetch();
     } catch (error) {
-      console.error("Error submitting form:", error);
+ 
       toast.error(error.data.message);
     }
   };

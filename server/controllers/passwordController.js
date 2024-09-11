@@ -24,13 +24,12 @@ const forgotPassword = async (req, res) => {
     // Send the OTP to the user's email
     if (email) {
       const user = await User.findOne({ email });
-      console.log(user, "user");
+
       const token = await Token.findOneAndUpdate(
         { userId: user._id },
         { otp: otp },
         { upsert: true }
       );
-      // console.log(token, "mytoken");
 
       if (!user) {
         return res.status(404).json({ error: "Please enter valid credentials" });
@@ -44,7 +43,7 @@ const forgotPassword = async (req, res) => {
         { otp: otp },
         { upsert: true }
       );
-      console.log(token, "mytoken");
+
       if (!user) {
         return res.status(404).json({ error: "Please enter valid credentials" });
       }
@@ -67,10 +66,10 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
-    console.log("call reset");
+
     // Check if the user exists
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (!user) {
       return res.status(404).json({ error: "Please enter valid credentials" });
     }

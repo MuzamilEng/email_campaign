@@ -18,7 +18,7 @@ const signUp = async (req, res) => {
   try {
     // Extract user data from request body
     const { firstName, lastName, password, email, phoneNumber, penCardNumber } = req.body;
-    // console.log(phoneNumber, "phone number");
+
     // Check for missing fields
     if (!firstName || !lastName || !password || !email || !phoneNumber || !penCardNumber) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -105,7 +105,7 @@ const signUp = async (req, res) => {
     });
   } catch (error) {
     console.error("Error during signup:", error);
-    console.log(req.body, "body");
+
     return res.status(500).json({ error: "Internal server error" }); // Avoid leaking specific error messages
   }
 };
@@ -117,7 +117,6 @@ const login = (req, res, next) => {
     if (err) {
       return res.status(500).json({ error: "Internal Server Error" });
     }
-    console.log(user, "user");
 
     if (!user) {
       return res.status(401).json({ error: info?.message });
@@ -145,7 +144,6 @@ const login = (req, res, next) => {
 };
 
 const getUserDetails = (req, res) => {
-  console.log(req.body, "token here");
   authenticateJWT(req, res, async () => {
     const user = req.user;
     return res.json(user);
@@ -153,7 +151,6 @@ const getUserDetails = (req, res) => {
 };
 
 const allUsers = async (req, res) => {
-  console.log(req.query, "query");
   const keyword = req.query.search
     ? {
         $or: [

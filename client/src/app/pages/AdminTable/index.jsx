@@ -46,7 +46,6 @@ const Index = () => {
   const handleDelete = async (id) => {
     try {
       await deleteAdminData(id);
-      console.log("Item deleted successfully!");
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -55,7 +54,7 @@ const Index = () => {
   const updateStatus = async (id, status) => {
     try {
       updateAdmin({ id, data: { status } }).unwrap();
-      console.log(status);
+
       refetchStatus();
     } catch (err) {
       console.log(err.message);
@@ -63,7 +62,6 @@ const Index = () => {
   };
 
   const handleDownload = (filePath) => {
-    console.log(filePath, "file akl");
     fetchCsvData(filePath, (sanitizedData) => {
       if (sanitizedData.length > 0) {
         const csv = Papa.unparse(sanitizedData); // Convert sanitized data to CSV string
@@ -97,7 +95,14 @@ const Index = () => {
   if (isUpdateError) {
     toast.error("Something wrong");
   }
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("token"));
 
+    if (user?.user?.email !== "admin@gmail.com") {
+      navigate("/");
+      return;
+    }
+  }, []);
   return (
     <AdminLayout>
       <div className="container mx-auto p-4">

@@ -16,7 +16,6 @@ import FileUploadByAdmin from "./app/pages/FileUploadByAdmin";
 import Wellcome from "./app/pages/Wellcome";
 
 function App() {
-  // console.log(JSON.parse(user).user.email, "userr");
   return (
     <Routes>
       <Route path="/" exact element={<Main />} />

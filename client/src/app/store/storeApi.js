@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const API_KEY = import.meta.env.VITE_REACT_API_URL;
-// console.log(API_KEY);
+
 //  https://infra.chequelivros.net/bookstores
 const token = JSON.parse(localStorage.getItem("token"));
 export const storeApi = createApi({

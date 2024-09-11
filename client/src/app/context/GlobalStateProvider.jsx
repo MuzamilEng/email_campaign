@@ -9,7 +9,7 @@ const GlobalStateContext = createContext();
 
 export const GlobalStateProvider = ({ children }) => {
   const { data: invoicesDetails, isLoading, isError } = useGetInvoicesDetailsQuery();
-  console.log(invoicesDetails, "invoicesDetails");
+
   const [menuBar, setMenuBar] = useState(false);
   const [hamburger, setHamburger] = useState(true);
   const [userLoginInfo, setUserLoginInfoState] = useState(null);
@@ -55,7 +55,7 @@ export const GlobalStateProvider = ({ children }) => {
     let filename = filePath;
     return filename;
   }
-  // console.log(csvViewData, "myData");
+
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
@@ -90,7 +90,7 @@ export const GlobalStateProvider = ({ children }) => {
         invoice?.month?.substring(0, 3).toLowerCase() ===
         selectedMonth.substring(0, 3).toLowerCase()
     );
-    // console.log(getInvoiceByMonth, "getInvoiceByMonth");
+
     setCurrentUserInvoiveData(getInvoiceByMonth);
   };
 
@@ -100,28 +100,18 @@ export const GlobalStateProvider = ({ children }) => {
       handleDownload(newPath);
     }
   }, [invoicesDetails?.data?.file]);
-  // console.log(invoicesDetails, "invoice details");
 
   useEffect(() => {
     let arr = [];
     if (csvViewData) {
-      console.log(typeof userPenCardNumber, "pan number");
-      console.log(csvViewData[1].pan, "csvViewData");
-      console.log(csvViewData[1]?.pan, "csvViewData");
-
       const filteredData = csvViewData.filter((item) => {
-        console.log(item.pan, "csvViewData only pan");
         return item.pan == userPenCardNumber;
       });
 
-      console.log(filteredData, "filteredData");
-      console.log(csvViewData, "csvViewData");
       setCurrentUserInvoiveData(filteredData);
       setMonthlyInvoice(filteredData);
     }
   }, [csvViewData, userPenCardNumber]);
-
-  // console.log(currentUserInvoiveData, "current data");
 
   return (
     <GlobalStateContext.Provider

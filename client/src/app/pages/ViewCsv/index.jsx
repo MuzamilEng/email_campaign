@@ -20,7 +20,7 @@ const ViewCsv = () => {
   const [orderBy, setOrderBy] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  // console.log(currentUserInvoiveData, "hhhhh");
+
   useEffect(() => {
     if (csvViewData?.length > 0) {
       setColumns(Object.keys(csvViewData[0]));
@@ -56,7 +56,7 @@ const ViewCsv = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  // console.log(records, "djsbjdbs");
+
   return (
     <div className="container mx-auto px-4 py-8">
       {csvViewData?.length > 0 && (

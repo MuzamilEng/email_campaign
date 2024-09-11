@@ -15,7 +15,7 @@ const Header = () => {
     const token = JSON.parse(localStorage.getItem("token"));
     setUser(token.user.email);
   }, []);
-  // console.log(user, "current user");
+
   return (
     <header className="w-full p-[0.4vw] bg-[#525A6F] text-white flex justify-between items-center">
       <nav className="flex items-center flex-col">

@@ -10,7 +10,7 @@ const path = require("path");
 exports.Invoice = async function (req, res) {
   try {
     const fileOnCloudinary = await uploadOnCloudinary(req.file.path);
-    // console.log(fileOnCloudinary, "file on cloudinary hudson upload");
+
     const invoiceRecord = new Invoice({
       fileName: req?.file?.originalname,
       filePath: req?.file?.path,
@@ -23,7 +23,6 @@ exports.Invoice = async function (req, res) {
       fileName: req?.file?.originalname, // Include the filename in the response
     });
   } catch (error) {
-    // console.error("Error in fileController/upload:", error);
     res.status(500).send("Internal server error");
   }
 };
@@ -40,7 +39,6 @@ exports.getInvoicesDetails = async (req, res, next) => {
       data: latestInvoice,
     });
   } catch (err) {
-    console.log(err.message);
     return next(new CustomError(err.message, 500));
   }
 };
@@ -75,11 +73,9 @@ module.exports.view = async function (req, res) {
         res.status(200).send(csv);
       })
       .on("error", (error) => {
-        console.error("Error parsing CSV:", error);
         res.status(500).send("Error parsing CSV file");
       });
   } catch (error) {
-    console.error("Error in fileController/view", error);
     res.status(500).send("Internal server error");
   }
 };
@@ -87,18 +83,17 @@ module.exports.view = async function (req, res) {
 exports.UploadCsv = async function (req, res) {
   try {
     const { id, name, noOfPoints } = req.body;
-    console.log(id, "upload id");
+
     const user = await User.findById(id);
-    console.log(user?.firstName, "user");
+
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
     // Upload the CSV file to Cloudinary
     const filePath = path.resolve(req.file.path);
-    console.log("filePath:", filePath);
+
     const cloudinaryUrl = await uploadOnCloudinary(filePath);
-    // console.log("Cloudinary URL:", cloudinaryUrl);
 
     if (!cloudinaryUrl) {
       return res.status(500).json({ message: "Failed to upload file to Cloudinary" });
@@ -123,7 +118,6 @@ exports.UploadCsv = async function (req, res) {
       cloudinaryUrl: cloudinaryUrl,
     });
   } catch (error) {
-    console.error("Error in fileController/UploadCsv:", error);
     res.status(500).send("Internal server error");
   }
 };
@@ -131,28 +125,13 @@ exports.UploadCsv = async function (req, res) {
 module.exports.deleteAdminData = async function (req, res) {
   try {
     const csvFile = await CSV.findById(req.body.id);
-    console.log(csvFile, "csvFile");
+
     await CSV.findByIdAndDelete(req.body.id);
     res.status(200).json({ message: "File deleted successfully" });
-    console.log("File deleted successfully");
   } catch (error) {
-    console.log("Error in fileController/delete", error);
     return res.status(500).send("Internal server error");
   }
 };
-
-// exports.getAdminData = async (req, res, next) => {
-//   try {
-//     const csv = await CSV.find();
-//     res.status(200).json({
-//       success: true,
-//       data: csv,
-//     });
-//   } catch (err) {
-//     console.log(err.message);
-//     return next(new CustomError(err.message, 500));
-//   }
-// };
 
 exports.updateRecord = async function (req, res) {
   const { name, noOfPoints } = req.body;
@@ -160,20 +139,19 @@ exports.updateRecord = async function (req, res) {
   try {
     try {
       const csvFile = await CSV.findById(req.params.id);
-      console.log(csvFile, "csvFile");
+
       await CSV.findByIdAndDelete(req.params.id);
-      console.log("File deleted successfully");
-      fs.unlink(csvFile?.filePath, (err) => {
-        if (err) {
-          console.error("Error deleting the file:", err);
-          return res.status(500).send("Internal server error");
-        }
-      });
+
+      // fs.unlink(csvFile?.filePath, (err) => {
+      //   if (err) {
+      //     console.error("Error deleting the file:", err);
+      //     return res.status(500).send("Internal server error");
+      //   }
+      // });
     } catch (error) {
-      console.log("Error in fileController/delete", error);
       return res.status(500).send("Internal server error");
     }
-    // console.log(req.file);
+
     let file = await CSV.create({
       fileName: req.file.originalname,
       filePath: req.file.path,
@@ -184,7 +162,6 @@ exports.updateRecord = async function (req, res) {
     });
     res.status(200).send("File uploaded successfully.");
   } catch (error) {
-    console.log("Error in fileController/upload", error);
     res.status(500).send("Internal server error");
   }
 };
@@ -192,7 +169,6 @@ exports.updateRecord = async function (req, res) {
 /** ------------------ EXPORTING FUNCTION To delete the file ------------------ **/
 module.exports.delete = async function (req, res) {
   try {
-    // console.log(req.params);
     let isFile = await CSV.findOne({ _id: req.params.id });
 
     if (isFile) {
@@ -201,7 +177,6 @@ module.exports.delete = async function (req, res) {
       return res.status(200).send("File deleted successfully");
     }
   } catch (error) {
-    // console.log("Error in fileController/delete", error);
     return res.status(500).json("message", error.message);
   }
 };
@@ -228,14 +203,13 @@ exports.updateAdminData = async (req, res, next) => {
 exports.getAdminData = async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(id, "client id");
+
     const csv = await CSV.find({ userId: id });
     res.status(200).json({
       success: true,
       data: csv,
     });
   } catch (err) {
-    console.log(err.message);
     return next(new CustomError(err.message, 500));
   }
 };
@@ -247,7 +221,6 @@ exports.getAdminRecords = async (req, res, next) => {
       data: csv,
     });
   } catch (err) {
-    console.log(err.message);
     return next(new CustomError(err.message, 500));
   }
 };

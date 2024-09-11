@@ -5,7 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 // import { dashboardForm } from "../data";
 
 export const FormPopup = ({ setPopup, id }) => {
-  const {  reset, control, handleSubmit, formState: { errors }, } = useForm();
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [updateAdminData, { isLoading, isError, isSuccess }] = useUpdateRecordMutation();
 
   const onSubmit = async (data) => {
@@ -16,11 +21,9 @@ export const FormPopup = ({ setPopup, id }) => {
         date: data.date,
       };
       await updateAdminData({ id, data: formData }).unwrap();
-      console.log("Updated data:", formData);
 
       setPopup(false);
     } catch (error) {
-      console.error("Error updating data:", error);
       toast.error("Error updating data");
     }
   };
