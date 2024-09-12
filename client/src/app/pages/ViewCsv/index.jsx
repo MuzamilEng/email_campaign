@@ -80,11 +80,10 @@ const ViewCsv = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedRecords
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((record, index) => (
+            {sortedRecords?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ?.map((record, index) => (
                 <TableRow key={index} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
-                  {columns.map((column) => (
+                  {columns?.map((column) => (
                     <TableCell key={column}>{record[column]}</TableCell>
                   ))}
                 </TableRow>
@@ -95,7 +94,7 @@ const ViewCsv = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={records.length}
+        count={records?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

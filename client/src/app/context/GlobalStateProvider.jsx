@@ -49,9 +49,6 @@ export const GlobalStateProvider = ({ children }) => {
     handleDownload(filePath);
   };
   function removeInitialPath(filePath) {
-    // Extract the filename from the full file path
-    // const parts = filePath.split(/[/\\]/); // Split by both forward slash and backslash
-    // const filename = parts.pop(); // Get the last part, which should be the filename
     let filename = filePath;
     return filename;
   }
@@ -102,16 +99,43 @@ export const GlobalStateProvider = ({ children }) => {
   }, [invoicesDetails?.data?.file]);
 
   useEffect(() => {
-    let arr = [];
-    if (csvViewData) {
-      const filteredData = csvViewData.filter((item) => {
-        return item.pan == userPenCardNumber;
-      });
+    const user = JSON.parse(localStorage.getItem("token"));
 
-      setCurrentUserInvoiveData(filteredData);
-      setMonthlyInvoice(filteredData);
+    if (user?.user?.email === "admin@gmail.com") {
+      // navigate("/");
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (csvViewData) {
+      // Check if the logged-in user is an admin
+      const user = JSON.parse(localStorage.getItem("token"));
+      const isAdmin = user?.user?.email === "admin@gmail.com";
+  
+      if (isAdmin) {
+        // If the user is an admin, set all CSV data without filtering
+        setCurrentUserInvoiveData(csvViewData);
+        setMonthlyInvoice(csvViewData);
+      } else {
+        // If the user is not an admin, filter the data based on PAN card fields
+        const filteredData = csvViewData?.filter((item) => {
+          // Normalize the keys and values for comparison
+          const panCardFields = ["pan", "pancard", "Pan", "PanCard", "Pancard", "Pan Card", "pan card"];
+          
+          return panCardFields.some((field) => {
+            const itemValue = item[field];
+            return itemValue && itemValue.toLowerCase() === userPenCardNumber.toLowerCase();
+          });
+        });
+    
+        setCurrentUserInvoiveData(filteredData);
+        setMonthlyInvoice(filteredData);
+      }
     }
   }, [csvViewData, userPenCardNumber]);
+  
+  
 
   return (
     <GlobalStateContext.Provider
