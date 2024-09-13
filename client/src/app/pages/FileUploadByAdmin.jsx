@@ -4,9 +4,12 @@ import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { useUploadReportMutation } from "../store/storeApi";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Toaster, toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+
 
 const FileUploadByAdmin = () => {
   const [firstName, setFirstName] = useState("");
+  const navigate = useNavigate();
   const ref = useRef();
   const [selectedFile, setSelectedFile] = useState();
   const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
@@ -33,6 +36,8 @@ const FileUploadByAdmin = () => {
     });
     setIsModalOpen(false);
     setSelectedFile(null);
+    navigate("/adminTable");
+
   }
 
   return (
