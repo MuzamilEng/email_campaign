@@ -122,18 +122,19 @@ export const GlobalStateProvider = ({ children }) => {
         const filteredData = csvViewData?.filter((item) => {
           // Normalize the keys and values for comparison
           const panCardFields = ["pan", "pancard", "Pan", "PanCard", "Pancard", "Pan Card", "pan card"];
-          
+  
           return panCardFields?.some((field) => {
             const itemValue = item[field];
-            return itemValue && itemValue?.toLowerCase() === userPenCardNumber?.toLowerCase();
+            return typeof itemValue === 'string' && itemValue?.toLowerCase() === userPenCardNumber?.toLowerCase();
           });
         });
-    
+  
         setCurrentUserInvoiveData(filteredData);
         setMonthlyInvoice(filteredData);
       }
     }
   }, [csvViewData, userPenCardNumber]);
+  
   
   
 
