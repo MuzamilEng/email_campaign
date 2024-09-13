@@ -110,7 +110,7 @@ export const GlobalStateProvider = ({ children }) => {
   useEffect(() => {
     if (csvViewData) {
       // Check if the logged-in user is an admin
-      const user = JSON.parse(localStorage.getItem("token"));
+      const user = JSON?.parse(localStorage.getItem("token"));
       const isAdmin = user?.user?.email === "admin@gmail.com";
   
       if (isAdmin) {
@@ -123,9 +123,9 @@ export const GlobalStateProvider = ({ children }) => {
           // Normalize the keys and values for comparison
           const panCardFields = ["pan", "pancard", "Pan", "PanCard", "Pancard", "Pan Card", "pan card"];
           
-          return panCardFields.some((field) => {
+          return panCardFields?.some((field) => {
             const itemValue = item[field];
-            return itemValue && itemValue.toLowerCase() === userPenCardNumber.toLowerCase();
+            return itemValue && itemValue?.toLowerCase() === userPenCardNumber?.toLowerCase();
           });
         });
     
