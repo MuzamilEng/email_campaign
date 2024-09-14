@@ -125,7 +125,7 @@ export const GlobalStateProvider = ({ children }) => {
   
           return panCardFields?.some((field) => {
             const itemValue = item[field];
-            return typeof itemValue === 'string' && itemValue?.toLowerCase() === userPenCardNumber?.toLowerCase();
+            return itemValue == userPenCardNumber
           });
         });
   

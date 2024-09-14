@@ -15,11 +15,17 @@ const FileUploadByAdmin = () => {
   const [uploadReport, { isLoading, isError, data, isSuccess }] = useUploadReportMutation();
   const handleUploadFile = async () => {
     const formData = new FormData();
-    if (!selectedFile) return toast.error("Please select a file");
+    try {
+      if (!selectedFile) return toast.error("Please select a file");
     formData.append("invoiceDetail", selectedFile);
     uploadReport(formData);
     setIsModalOpen(false);
     setSelectedFile(null);
+    navigate("/adminTable");
+    } catch (error) {
+      console.log(error);
+      navigate("/adminTable");
+    }
   };
   const handleFileInputChange = (event) => {
     setSelectedFile(event.target.files[0]);
