@@ -73,7 +73,7 @@ module.exports.view = async function (req, res) {
         res.status(200).send(csv);
       })
       .on("error", (error) => {
-        res.status(500).send("Error parsing CSV file");
+        res.status(500).send("Error parsign CSV file");
       });
   } catch (error) {
     res.status(500).send("Internal server error");
@@ -82,7 +82,7 @@ module.exports.view = async function (req, res) {
 
 exports.UploadCsv = async function (req, res) {
   try {
-    const { id, name, noOfPoints } = req.body;
+    const { id, name, emailCount } = req.body;
 
     const user = await User.findById(id);
 
@@ -105,7 +105,7 @@ exports.UploadCsv = async function (req, res) {
       firstName: user?.firstName,
       file: cloudinaryUrl,
       name,
-      noOfPoints,
+      noOfPoints: emailCount,
       status: "Waiting",
     });
 

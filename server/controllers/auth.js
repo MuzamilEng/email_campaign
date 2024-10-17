@@ -35,7 +35,10 @@ const signUp = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: "Email already exists" });
     }
-
+    const penCard = await User.findOne({ penCardNumber });
+    if (penCard) {
+      res.status(400).json({ error: "Pen card number already exists" });
+    }
     // Upload image to Cloudinary (if included in request)
     let mainImageURL;
     if (req.file) {
@@ -96,10 +99,12 @@ const signUp = async (req, res) => {
     return res.status(200).send({
       // message: "An email has been sent to your account for verification.",
       user: {
+        id: savedUser?._id,
         firstName: savedUser?.firstName,
         lastName: savedUser?.lastName,
         email: savedUser?.email,
         phoneNumber: savedUser?.phoneNumber,
+        penCardNumber: savedUser?.penCardNumber,
         // ... (include other non-sensitive fields)
       },
     });
@@ -143,11 +148,15 @@ const login = (req, res, next) => {
   })(req, res, next);
 };
 
-const getUserDetails = (req, res) => {
-  authenticateJWT(req, res, async () => {
-    const user = req.user;
-    return res.json(user);
-  });
+const getUserDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error retrieving user details:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const allUsers = async (req, res) => {
@@ -169,10 +178,31 @@ const allUsers = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const updateProfile = async (req, res) => {
+  try {
+    const { id, firstName, lastName, email, phoneNumber, penCardNumber } = req.body;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+    user.penCardNumber = penCardNumber;
 
+    const updatedUser = await user.save();
+
+    res.status(200).json({ token: "abc", user: updatedUser });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 module.exports = {
   signUp,
   login,
   getUserDetails,
   allUsers,
+  updateProfile,
 };

@@ -77,7 +77,7 @@ const Login = () => {
           <Link to="/signup">
             <div className="mt-[1vw]">
               <button type="button" className={styles.white_btn}>
-                Sing Up
+                sign Up
               </button>
             </div>
           </Link>

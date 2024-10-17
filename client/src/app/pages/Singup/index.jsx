@@ -47,15 +47,22 @@ const Signup = () => {
       toast.error(err?.data?.error || "Signup failed");
     }
   };
-  if (isSuccess) {
-    toast.success("Registered successfully you will recieve a message shortly");
-    navigate("/login");
-    localStorage.setItem("userData", JSON.stringify(data));
-  }
+
   useEffect(() => {
     if (data) {
+      console.log(data, "data");
     }
   }, [data]);
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Registered successfully you will recieve a message shortly");
+      navigate("/login");
+      localStorage.setItem("userData", JSON.stringify(data));
+    }
+    if (isError) {
+      console.log(error, "error");
+    }
+  }, [isSuccess, isError]);
 
   return (
     <div className={styles.signup_container}>
@@ -133,7 +140,7 @@ const Signup = () => {
               required
               className={styles.input}
             />
-            {isError && <div className={styles.error_msg}>{error?.data?.error}</div>}
+            {/* {isError && <div className={styles.error_msg}>{error?.data?.error}</div>} */}
             <button type="submit" className={styles.green_btn}>
               {isLoading ? "Loading..." : "Sign up"}
             </button>

@@ -32,7 +32,7 @@ const useFetch = () => {
       const sanitizedData = sanitizeColumns(data);
       callback(sanitizedData); // Pass sanitized data to callback
     } catch (error) {
-      console.error("Error fetching or parsing CSV data:", error);
+      console.error("Error fetching or parsign CSV data:", error);
     }
   };
 

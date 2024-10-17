@@ -27,7 +27,8 @@ const Index = () => {
 
   const { isLoading, data, refetch: refetchUserData } = useGetAllRecordsQuery(id);
 
-  const tableHeads = ["Created at", "Report Name", "Action"];
+  // Added "Email Count" in the table headers
+  const tableHeads = ["Created at", "Report Name", "Email Count", "Action"];
 
   const formatDate = useCallback((dateString) => {
     const options = {
@@ -120,6 +121,18 @@ const Index = () => {
                     <span className="text-gray-500">No Report</span>
                   )}
                 </TableCell>
+
+                {/* New Email Count Column */}
+                <TableCell className="px-6 py-4">
+                  {item?.noOfPoints ? (
+                    <Typography variant="body2" component="span">
+                      {item?.noOfPoints}
+                    </Typography>
+                  ) : (
+                    <span className="text-gray-500">No Email Count</span>
+                  )}
+                </TableCell>
+
                 <TableCell className="px-6 py-4">
                   <div className="flex gap-4">
                     <Tooltip title="Update">

@@ -5,19 +5,15 @@ import axios from "axios";
 import { useGetAllRecordsQuery, useSubmitFormMutation } from "../store/storeApi";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalStateProvider";
-import { Icon } from "@iconify/react";
 import { FileUpload } from "./FileUpload";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import Tooltip from "@mui/material/Tooltip";
 import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
-import DateRangePicker from "./DatePicker";
 
 const Form = () => {
   const {
@@ -26,11 +22,9 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { data, refetch } = useGetAllRecordsQuery();
-  const navigate = useNavigate();
+  const { refetch } = useGetAllRecordsQuery();
   const { setUploadFile } = useGlobalContext();
   const [open, setOpen] = useState(false);
-  const [showPointFields, setShowPointFields] = useState(false);
   const [recordFile, setRecordFile] = useState(null);
   const [campaignDetails, setCampaignDetails] = useState({
     noOfPoints: "",
@@ -38,10 +32,10 @@ const Form = () => {
     startDate: dayjs(null),
     endDate: dayjs(null),
     file: null,
+    emailCount: "", // Email count field
   });
-  const [submitData, { isLoading, isError, error, isSuccess, success }] = useSubmitFormMutation();
+  const [submitData, { isLoading, isError, error, isSuccess }] = useSubmitFormMutation();
   const [userId, setUserId] = useState("");
-  const [calculatedPoints, setCalculatedPoints] = useState(0);
 
   const handleFileChange = (file) => {
     setRecordFile(file);
@@ -50,6 +44,7 @@ const Form = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -60,8 +55,7 @@ const Form = () => {
       for (const key in campaignDetails) {
         formData.append(key, campaignDetails[key]);
       }
-
-      formData.append("id", userId); // Add id only once here
+      formData.append("id", userId);
       if (recordFile) {
         formData.append("dataFile", recordFile);
       }
@@ -69,40 +63,35 @@ const Form = () => {
       const response = await submitData(formData);
 
       setUploadFile(true);
-      localStorage.setItem("csvData", JSON.stringify(response?.data));
-      toast.success("File uploaded successfully");
       setOpen(false);
       setCampaignDetails({});
-
       refetch();
     } catch (error) {
- 
       toast.error(error.data.message);
     }
   };
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("token"));
-    setUserId(id?.user?._id); // Set userId here
+    setUserId(id?.user?._id);
   }, []);
 
   useEffect(() => {
-    if (showPointFields && campaignDetails.noOfPoints) {
-      const points = parseInt(campaignDetails.noOfPoints, 10);
-      if (!isNaN(points)) {
-        setCalculatedPoints(points * 50);
-      } else {
-        setCalculatedPoints(0);
-      }
+    if (isError) {
+      toast.error("Something went wrong in file upload, please try again");
     }
-  }, [showPointFields, campaignDetails.noOfPoints]);
+    if (isSuccess) {
+      toast.success("File uploaded successfully");
+      setOpen(false);
+    }
+  }, [isError, isSuccess]);
 
   return (
     <main className="flex w-full justify-center p-[1vw] items-center">
       <Toaster position="top-center" />
       <section className="bg-white max-w-[55vw] w-full p-[1vw]">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box className="">
+          <Box>
             <Button variant="contained" size="large" onClick={handleClickOpen}>
               Upload Email Data
             </Button>
@@ -119,6 +108,29 @@ const Form = () => {
                     <FileUpload handleFile={handleFileChange} />
                   </figure>
                 </section>
+
+                {/* Email Count Field */}
+                <Controller
+                  name="emailCount"
+                  control={control}
+                  defaultValue={campaignDetails.emailCount}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Email Count"
+                      type="number"
+                      fullWidth
+                      margin="normal"
+                      value={campaignDetails.emailCount} // Ensure value is bound to campaignDetails state
+                      onChange={(e) =>
+                        setCampaignDetails({
+                          ...campaignDetails,
+                          emailCount: e.target.value,
+                        })
+                      }
+                    />
+                  )}
+                />
               </form>
             </DialogContent>
             <DialogActions>

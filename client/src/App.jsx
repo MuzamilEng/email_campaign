@@ -14,6 +14,7 @@ import Invoices from "./app/pages/Invoices";
 
 import FileUploadByAdmin from "./app/pages/FileUploadByAdmin";
 import Wellcome from "./app/pages/Wellcome";
+import UpdateProfile from "./app/pages/UpdateProfile";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Route path="/csv" element={<ViewCsv />} />
       <Route path="/fileuploadbyadmin" element={<FileUploadByAdmin />} />
       <Route path="/wellcome" element={<Wellcome />} />
+      <Route path="/update-profile" element={<UpdateProfile />} />
     </Routes>
   );
 }

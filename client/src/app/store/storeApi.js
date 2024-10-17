@@ -11,11 +11,11 @@ export const storeApi = createApi({
       headers.set("Authorization", `Bearer ${token?.token}`);
     },
   }),
-  tagTypes: ["Post", "currentUser"],
+  tagTypes: ["Post", "currentUser", "userDetail"],
   endpoints: (builder) => ({
     getAllRecords: builder.query({
       query: (id) => `/getAdminData/${id}`,
-      providesTags: ["Post"],
+      providesTags: ["currentUser"],
     }),
     adminRecords: builder.query({
       query: () => `/getAdminRecords`,
@@ -31,11 +31,11 @@ export const storeApi = createApi({
         method: "DELETE",
         body: data,
       }),
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["currentUser"],
     }),
     getLogedinUser: builder.query({
-      query: () => `/getCurrentUser`,
-      providesTags: ["currentUser"],
+      query: (userId) => `/getCurrentUser/${userId}`, // Use the userId parameter in the endpoint
+      providesTags: ["userDetail"],
     }),
     submitForm: builder.mutation({
       query: (data) => ({
@@ -61,6 +61,7 @@ export const storeApi = createApi({
       }),
       invalidatesTags: ["getInvoice"],
     }),
+
     updateRecord: builder.mutation({
       query: ({ id, data }) => ({
         url: `/updateRecord/${id}`,
@@ -83,6 +84,14 @@ export const storeApi = createApi({
         method: "DELETE",
       }),
     }),
+    updateProfile: builder.mutation({
+      query: (data) => ({
+        url: "/update-profile",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["userDetail"],
+    }),
   }),
 });
 
@@ -98,4 +107,5 @@ export const {
   useSignupMutation,
   useGetLogedinUserQuery,
   useAdminRecordsQuery,
+  useUpdateProfileMutation,
 } = storeApi;

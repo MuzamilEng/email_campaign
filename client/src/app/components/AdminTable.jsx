@@ -17,7 +17,7 @@ import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { useGlobalContext } from "../context/GlobalStateProvider";
-import { FaDownload, FaUser, FaCalendarAlt, FaFileAlt } from "react-icons/fa";
+import { FaDownload, FaUser, FaCalendarAlt, FaFileAlt, FaEnvelope } from "react-icons/fa";
 
 const ActionButton = styled(Button)(({ theme }) => ({
   transition: "transform 0.3s ease-in-out",
@@ -50,7 +50,6 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 
 function AdminTable({ globalAdminData, formatDate, handleDownload }) {
   const [page, setPage] = useState(0);
-
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [csvFilename, setFilename] = useState(null);
   const navigate = useNavigate();
@@ -92,6 +91,12 @@ function AdminTable({ globalAdminData, formatDate, handleDownload }) {
                 </StyledTableCell>
                 <StyledTableCell style={{ fontWeight: "bold", backgroundColor: "#f3f4f6" }}>
                   <IconWrapper>
+                    <FaEnvelope />
+                    <span>Email Count</span>
+                  </IconWrapper>
+                </StyledTableCell>
+                <StyledTableCell style={{ fontWeight: "bold", backgroundColor: "#f3f4f6" }}>
+                  <IconWrapper>
                     <FaFileAlt />
                     <span>Files</span>
                   </IconWrapper>
@@ -105,6 +110,7 @@ function AdminTable({ globalAdminData, formatDate, handleDownload }) {
                   <StyledTableRow key={item._id}>
                     <StyledTableCell>{item?.firstName || "User"}</StyledTableCell>
                     <StyledTableCell>{formatDate(item.createdAt)}</StyledTableCell>
+                    <StyledTableCell>{item?.noOfPoints || 0}</StyledTableCell>
                     <StyledTableCell>
                       <Tooltip title="Download" arrow>
                         <ActionButton
