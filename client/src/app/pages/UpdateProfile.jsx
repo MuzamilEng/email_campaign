@@ -72,7 +72,7 @@ const UpdateProfile = () => {
         draggable: true,
         progress: undefined,
       });
-      navigate("/wellcome");
+      navigate("/welcome");
     }
     if (isError) {
       toast.error("Error updating profile", {
@@ -290,7 +290,7 @@ const UpdateProfile = () => {
           <Divider />
 
           <CardActions sx={{ justifyContent: "flex-end", p: 3 }}>
-            <Button
+            <Button href="/welcome"
               variant="outlined"
               sx={{
                 px: 4,

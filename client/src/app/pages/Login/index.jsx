@@ -27,7 +27,7 @@ const Login = () => {
 
       setLoading(false);
       toast.success("Login Successful");
-      setTimeout(() => navigate("/wellcome"), 2000);
+      setTimeout(() => navigate("/welcome"), 2000);
     } catch (error) {
       setLoading(false);
       console.log(error.response.data.error);

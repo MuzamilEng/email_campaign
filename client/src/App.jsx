@@ -11,9 +11,8 @@ import AdminTable from "./app/pages/AdminTable";
 import ViewCsv from "./app/pages/ViewCsv";
 import { useEffect, useState } from "react";
 import Invoices from "./app/pages/Invoices";
-
+import Welcome from "./app/pages/Welcome";
 import FileUploadByAdmin from "./app/pages/FileUploadByAdmin";
-import Wellcome from "./app/pages/Wellcome";
 import UpdateProfile from "./app/pages/UpdateProfile";
 
 function App() {
@@ -31,7 +30,7 @@ function App() {
       <Route path="/adminTable" element={<AdminTable />} />
       <Route path="/csv" element={<ViewCsv />} />
       <Route path="/fileuploadbyadmin" element={<FileUploadByAdmin />} />
-      <Route path="/wellcome" element={<Wellcome />} />
+      <Route path="/welcome" element={<Welcome />} />
       <Route path="/update-profile" element={<UpdateProfile />} />
     </Routes>
   );

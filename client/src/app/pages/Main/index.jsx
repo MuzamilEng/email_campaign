@@ -12,7 +12,7 @@ const Main = () => {
       if (!storedType) {
         navigate("/login");
       } else {
-        navigate("/wellcome");
+        navigate("/welcome");
       }
     }, 1000);
   }, []);
